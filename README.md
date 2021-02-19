@@ -1,16 +1,40 @@
-# demoapp
+# Supabase Demo App
 
-A new Flutter project.
+A Flutter project to demo supabase dart client.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Please update your `SUPABASE_URL` and `SUPABASE_ANNON_KEY` on `lib/constants.dart` before starting the app.
 
-A few resources to get you started if this is your first Flutter project:
+## Database schema
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```
+create table public.users (
+  id          uuid not null primary key, -- UUID from auth.users
+  email       text,
+  data        jsonb
+);
+comment on table public.users is 'Profile data for each user.';
+comment on column public.users.id is 'References the internal Supabase Auth user.';
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+-- Secure the tables
+alter table public.users enable row level security;
+create policy "Allow logged-in read access" on public.users for select using ( auth.role() = 'authenticated' );
+create policy "Allow individual insert access" on public.users for insert with check ( auth.uid() = id );
+create policy "Allow individual update access" on public.users for update using ( auth.uid() = id );
+
+-- inserts a row into public.users
+create function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.users (id, email)
+  values (new.id, new.email);
+  return new;
+end;
+$$ language plpgsql security definer;
+
+-- trigger the function every time a user is created
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+```
