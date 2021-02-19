@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class RoundedInputField extends StatelessWidget {
   final String hintText;
   final ValueChanged<String> onChanged;
+  final TextInputType keyboardType;
   const RoundedInputField({
     Key key,
     this.hintText,
     this.onChanged,
+    this.keyboardType
   }) : super(key: key);
 
   @override
@@ -14,6 +16,7 @@ class RoundedInputField extends StatelessWidget {
     return TextField(
       onChanged: onChanged,
       obscureText: false,
+      keyboardType: keyboardType ?? TextInputType.text,
       style: TextStyle(fontSize: 20.0),
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),

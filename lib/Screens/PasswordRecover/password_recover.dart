@@ -47,6 +47,7 @@ class _PasswordRecoverState extends State<PasswordRecoverScreen> {
             SizedBox(height: 25.0),
             RoundedInputField(
               hintText: "Email address",
+              keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
                 setState(() {
                   email = value;

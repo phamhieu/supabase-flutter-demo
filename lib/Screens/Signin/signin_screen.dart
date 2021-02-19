@@ -73,6 +73,7 @@ class _SignInState extends State<SignInScreen> {
             SizedBox(height: 25.0),
             RoundedInputField(
               hintText: "Email address",
+              keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
                 setState(() {
                   email = value;
