@@ -29,6 +29,7 @@ dependencies:
   rounded_loading_button: ^1.0.0
   url_launcher: ^5.7.10
   supabase: ^0.0.1-dev.8
+  google_maps_flutter: ^1.2.0
 
 dev_dependencies:
   flutter_test:

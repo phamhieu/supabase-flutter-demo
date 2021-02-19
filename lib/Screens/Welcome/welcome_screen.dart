@@ -79,10 +79,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               onPressed: () {
                 _onSignOutPress(context);
               },
-            )
+            ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.of(context).pushNamed(MAP_SCREEN);
+          },
+          label: Text('Start!'),
+          icon: Icon(Icons.play_circle_fill)),
     );
   }
 }
