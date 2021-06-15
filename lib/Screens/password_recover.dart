@@ -1,6 +1,4 @@
 import 'package:demoapp/components/alert_modal.dart';
-import 'package:demoapp/components/link_button.dart';
-import 'package:demoapp/components/rounded_input_field.dart';
 import 'package:demoapp/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -45,34 +43,35 @@ class _PasswordRecoverState extends State<PasswordRecoverScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 25.0),
-            RoundedInputField(
-              hintText: "Email address",
+            TextField(
+              onChanged: (value) => setState(() {
+                email = value;
+              }),
               keyboardType: TextInputType.emailAddress,
-              onChanged: (value) {
-                setState(() {
-                  email = value;
-                });
-              },
+              decoration: InputDecoration(
+                hintText: 'Enter your email address',
+              ),
             ),
             SizedBox(
               height: 35.0,
             ),
             RoundedLoadingButton(
-              child: Text('Send reset password instructions',
-                  style: TextStyle(fontSize: 16, color: Colors.white)),
+              color: Colors.green,
+              child: const Text(
+                'Send reset password instructions',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
               controller: _btnController,
               onPressed: () {
                 _onPasswordRecoverPress(context);
               },
             ),
-            SizedBox(
-              height: 35.0,
+            TextButton(
+              child: const Text("Go back to sign in"),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(SIGNIN_SCREEN);
+              },
             ),
-            LinkButton(
-                text: "Go back to sign in",
-                press: () {
-                  Navigator.of(context).pushReplacementNamed(SIGNIN_SCREEN);
-                }),
           ],
         ),
       ),

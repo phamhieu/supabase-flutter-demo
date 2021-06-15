@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:demoapp/Screens/Welcome/welcome_screen.dart';
+import 'package:demoapp/Screens/welcome_screen.dart';
 import 'package:demoapp/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

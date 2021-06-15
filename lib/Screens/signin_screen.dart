@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gotrue/gotrue.dart';
-import 'package:demoapp/Screens/Welcome/welcome_screen.dart';
+import 'package:demoapp/Screens/welcome_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
-import 'package:demoapp/components/link_button.dart';
-import 'package:demoapp/components/rounded_input_field.dart';
-import 'package:demoapp/components/rounded_password_field.dart';
 import 'package:demoapp/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -62,8 +59,9 @@ class _SignInState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Sign in'),
+        title: const Text('Sign in'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -72,57 +70,64 @@ class _SignInState extends State<SignInScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 25.0),
-            RoundedInputField(
-              hintText: "Email address",
+            TextField(
+              onChanged: (value) => setState(() {
+                email = value;
+              }),
               keyboardType: TextInputType.emailAddress,
-              onChanged: (value) {
-                setState(() {
-                  email = value;
-                });
-              },
+              decoration: InputDecoration(
+                hintText: 'Enter your email address',
+              ),
             ),
             SizedBox(height: 15.0),
-            RoundedPasswordField(
-              onChanged: (value) {
-                setState(() {
-                  password = value;
-                });
-              },
+            TextField(
+              onChanged: (value) => setState(() {
+                password = value;
+              }),
+              obscureText: true,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                hintText: 'Password',
+              ),
             ),
             SizedBox(height: 15.0),
             RoundedLoadingButton(
-              child: Text('Sign in',
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
+              color: Colors.green,
+              child: const Text(
+                'Sign in',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
               controller: _signInEmailController,
               onPressed: () {
                 _onSignInPress(context);
               },
             ),
-            // SizedBox(height: 25.0),
-            // RoundedLoadingButton(
-            //   color: Colors.black87,
-            //   child: Text('Sign in with Github',
-            //       style: TextStyle(fontSize: 20, color: Colors.white)),
-            //   controller: _signInGithubController,
-            //   onPressed: () {
-            //     _onSignInWithGithub(context);
-            //   },
-            // ),
-            SizedBox(height: 35.0),
-            LinkButton(
-                text: "Forgot your password ?",
-                press: () {
-                  Navigator.of(context)
-                      .pushReplacementNamed(PASSWORDRECOVER_SCREEN);
-                }),
-            SizedBox(
-              height: 30.0,
+            SizedBox(height: 25.0),
+            RoundedLoadingButton(
+              color: Colors.black87,
+              child: const Text(
+                'Sign in with Github',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+              controller: _signInGithubController,
+              onPressed: () {
+                _onSignInWithGithub(context);
+              },
             ),
-            LinkButton(
-                text: "Don’t have an Account ? Sign up",
-                press: () {
-                  Navigator.of(context).pushReplacementNamed(SIGNUP_SCREEN);
-                }),
+            SizedBox(height: 15.0),
+            TextButton(
+              child: const Text("Forgot your password ?"),
+              onPressed: () {
+                Navigator.of(context)
+                    .pushReplacementNamed(PASSWORDRECOVER_SCREEN);
+              },
+            ),
+            TextButton(
+              child: const Text("Don’t have an Account ? Sign up"),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(SIGNUP_SCREEN);
+              },
+            ),
           ],
         ),
       ),

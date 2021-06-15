@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gotrue/gotrue.dart';
-import 'package:demoapp/Screens/Signin/signin_screen.dart';
+import 'package:demoapp/Screens/signin_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
 import 'package:demoapp/constants.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -83,12 +83,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(context).pushNamed(MAP_SCREEN);
-          },
-          label: Text('Start!'),
-          icon: Icon(Icons.play_circle_fill)),
     );
   }
 }

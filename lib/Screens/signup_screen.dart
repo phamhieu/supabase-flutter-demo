@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:demoapp/Screens/Welcome/welcome_screen.dart';
+import 'package:demoapp/Screens/welcome_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
-import 'package:demoapp/components/link_button.dart';
-import 'package:demoapp/components/rounded_input_field.dart';
-import 'package:demoapp/components/rounded_password_field.dart';
 import 'package:demoapp/constants.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,38 +58,44 @@ class _SignUpState extends State<SignUpScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 15.0),
-            RoundedInputField(
-              hintText: "Email address",
+            TextField(
+              onChanged: (value) => setState(() {
+                email = value;
+              }),
               keyboardType: TextInputType.emailAddress,
-              onChanged: (value) {
-                setState(() {
-                  email = value;
-                });
-              },
+              decoration: InputDecoration(
+                hintText: 'Enter your email address',
+              ),
             ),
             SizedBox(height: 15.0),
-            RoundedPasswordField(
-              onChanged: (value) {
-                setState(() {
-                  password = value;
-                });
-              },
+            TextField(
+              onChanged: (value) => setState(() {
+                password = value;
+              }),
+              obscureText: true,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                hintText: 'Password',
+              ),
             ),
             SizedBox(height: 15.0),
             RoundedLoadingButton(
-              child: Text('Sign up',
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
+              color: Colors.green,
+              child: const Text(
+                'Sign up',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
               controller: _btnController,
               onPressed: () {
                 _onSignUpPress(context);
               },
             ),
-            SizedBox(height: 35.0),
-            LinkButton(
-                text: "Already have an Account ? Sign in",
-                press: () {
-                  Navigator.of(context).pushReplacementNamed(SIGNIN_SCREEN);
-                }),
+            TextButton(
+              child: const Text("Already have an Account ? Sign in"),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(SIGNIN_SCREEN);
+              },
+            ),
           ],
         ),
       ),
