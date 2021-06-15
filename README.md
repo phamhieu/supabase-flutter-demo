@@ -9,34 +9,51 @@ Please update your `SUPABASE_URL` and `SUPABASE_ANNON_KEY` on `lib/constants.dar
 ## Database schema
 
 ```
-create table public.users (
-  id          uuid not null primary key, -- UUID from auth.users
-  email       text,
-  data        jsonb
+-- Create a table for Public Profiles
+create table profiles (
+  id uuid references auth.users not null,
+  updated_at timestamp with time zone,
+  username text unique,
+  avatar_url text,
+  website text,
+
+  primary key (id),
+  unique(username),
+  constraint username_length check (char_length(username) >= 3)
 );
-comment on table public.users is 'Profile data for each user.';
-comment on column public.users.id is 'References the internal Supabase Auth user.';
 
--- Secure the tables
-alter table public.users enable row level security;
-create policy "Allow logged-in read access" on public.users for select using ( auth.role() = 'authenticated' );
-create policy "Allow individual insert access" on public.users for insert with check ( auth.uid() = id );
-create policy "Allow individual update access" on public.users for update using ( auth.uid() = id );
+alter table profiles enable row level security;
 
--- inserts a row into public.users
-create function public.handle_new_user()
-returns trigger as $$
-begin
-  insert into public.users (id, email)
-  values (new.id, new.email);
-  return new;
-end;
-$$ language plpgsql security definer;
+create policy "Public profiles are viewable by everyone."
+  on profiles for select
+  using ( true );
 
--- trigger the function every time a user is created
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
+create policy "Users can insert their own profile."
+  on profiles for insert
+  with check ( auth.uid() = id );
+
+create policy "Users can update own profile."
+  on profiles for update
+  using ( auth.uid() = id );
+
+-- Set up Realtime!
+begin;
+  drop publication if exists supabase_realtime;
+  create publication supabase_realtime;
+commit;
+alter publication supabase_realtime add table profiles;
+
+-- Set up Storage!
+insert into storage.buckets (id, name)
+values ('avatars', 'avatars');
+
+create policy "Avatar images are publicly accessible."
+  on storage.objects for select
+  using ( bucket_id = 'avatars' );
+
+create policy "Anyone can upload an avatar."
+  on storage.objects for insert
+  with check ( bucket_id = 'avatars' );
 ```
 
 ## Commands
