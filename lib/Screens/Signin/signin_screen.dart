@@ -11,7 +11,7 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SignInScreen extends StatefulWidget {
-  SignInScreen({Key key}) : super(key: key);
+  SignInScreen({Key? key}) : super(key: key);
 
   @override
   _SignInState createState() => _SignInState();
@@ -30,13 +30,13 @@ class _SignInState extends State<SignInScreen> {
         await supabaseClient.auth.signIn(email: email, password: password);
     if (response.error != null) {
       alertModal.show(context,
-          title: 'Sign in failed', message: response.error.message);
+          title: 'Sign in failed', message: response.error!.message);
       _signInEmailController.reset();
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString(PERSIST_SESSION_KEY, response.data.persistSessionString);
+      prefs.setString(PERSIST_SESSION_KEY, response.data!.persistSessionString);
 
-      final title = 'Welcome ${response.data.user.email}';
+      final title = 'Welcome ${response.data!.user!.email}';
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -49,10 +49,11 @@ class _SignInState extends State<SignInScreen> {
   }
 
   void _onSignInWithGithub(BuildContext context) async {
-    final response = await supabaseClient.auth.signIn(provider: Provider.github);
-    if (await canLaunch(response.url)) {
+    final response =
+        await supabaseClient.auth.signIn(provider: Provider.github);
+    if (await canLaunch(response.url!)) {
       print('response.url: ${response.url}');
-      await launch(response.url);
+      await launch(response.url!);
     } else {
       throw 'Could not launch ${response.url}';
     }

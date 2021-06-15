@@ -9,7 +9,7 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatefulWidget {
-  SignUpScreen({Key key}) : super(key: key);
+  SignUpScreen({Key? key}) : super(key: key);
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -25,7 +25,7 @@ class _SignUpState extends State<SignUpScreen> {
     final response = await supabaseClient.auth.signUp(email, password);
     if (response.error != null) {
       alertModal.show(context,
-          title: 'Sign up failed', message: response.error.message);
+          title: 'Sign up failed', message: response.error!.message);
       _btnController.reset();
     } else if (response.data == null && response.user == null) {
       alertModal.show(context,
@@ -35,8 +35,8 @@ class _SignUpState extends State<SignUpScreen> {
       _btnController.success();
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString(PERSIST_SESSION_KEY, response.data.persistSessionString);
-      final title = 'Welcome ${response.data.user.email}';
+      prefs.setString(PERSIST_SESSION_KEY, response.data!.persistSessionString);
+      final title = 'Welcome ${response.data!.user!.email}';
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

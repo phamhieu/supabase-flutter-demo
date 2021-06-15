@@ -4,12 +4,12 @@ class RoundedInputField extends StatelessWidget {
   final String hintText;
   final ValueChanged<String> onChanged;
   final TextInputType keyboardType;
-  const RoundedInputField({
-    Key key,
-    this.hintText,
-    this.onChanged,
-    this.keyboardType
-  }) : super(key: key);
+  const RoundedInputField(
+      {Key? key,
+      required this.hintText,
+      required this.onChanged,
+      required this.keyboardType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

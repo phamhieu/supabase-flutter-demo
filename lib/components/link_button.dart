@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class LinkButton extends StatelessWidget {
   final String text;
-  final Function press;
+  final VoidCallback? press;
   final textColor;
   const LinkButton({
-    Key key,
-    this.text,
+    Key? key,
+    required this.text,
     this.press,
     this.textColor = Colors.black,
   }) : super(key: key);

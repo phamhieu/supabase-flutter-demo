@@ -41,15 +41,19 @@ class SplashScreenState extends State<SplashScreen>
       return showSignIn();
     }
 
-    String jsonStr = prefs.getString(PERSIST_SESSION_KEY);
+    String? jsonStr = prefs.getString(PERSIST_SESSION_KEY);
+    if (jsonStr == null) {
+      return showSignIn();
+    }
+
     final response = await supabaseClient.auth.recoverSession(jsonStr);
     if (response.error != null) {
       prefs.remove(PERSIST_SESSION_KEY);
       return showSignIn();
     }
 
-    prefs.setString(PERSIST_SESSION_KEY, response.data.persistSessionString);
-    final title = 'Welcome ${response.data.user.email}';
+    prefs.setString(PERSIST_SESSION_KEY, response.data!.persistSessionString);
+    final title = 'Welcome ${response.data!.user!.email}';
     showWelcome(title);
   }
 

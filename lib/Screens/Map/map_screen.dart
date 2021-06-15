@@ -13,7 +13,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   Completer<GoogleMapController> _controller = Completer();
-  User user;
+  User? user;
 
   @override
   void initState() {

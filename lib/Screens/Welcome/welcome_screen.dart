@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class WelcomeScreen extends StatefulWidget {
   final String _appBarTitle;
 
-  WelcomeScreen(this._appBarTitle, {Key key}) : super(key: key);
+  WelcomeScreen(this._appBarTitle, {Key? key}) : super(key: key);
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState(_appBarTitle);
@@ -19,7 +19,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final RoundedLoadingButtonController _btnController =
       new RoundedLoadingButtonController();
   final String _appBarTitle;
-  User user;
+  User? user;
 
   _WelcomeScreenState(this._appBarTitle);
 
@@ -37,7 +37,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     final response = await supabaseClient.auth.signOut();
     if (response.error != null) {
       alertModal.show(context,
-          title: 'Sign out failed', message: response.error.message);
+          title: 'Sign out failed', message: response.error!.message);
       _btnController.reset();
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
