@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gotrue/gotrue.dart';
 import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
 import 'package:demoapp/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SignInScreen extends StatefulWidget {
   SignInScreen({Key? key}) : super(key: key);
@@ -16,8 +14,6 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInState extends State<SignInScreen> {
   final RoundedLoadingButtonController _signInEmailController =
-      new RoundedLoadingButtonController();
-  final RoundedLoadingButtonController _signInGithubController =
       new RoundedLoadingButtonController();
   var email = '';
   var password = '';
@@ -42,17 +38,6 @@ class _SignInState extends State<SignInScreen> {
           },
         ),
       );
-    }
-  }
-
-  void _onSignInWithGithub(BuildContext context) async {
-    final response =
-        await supabaseClient.auth.signIn(provider: Provider.github);
-    if (await canLaunch(response.url!)) {
-      print('response.url: ${response.url}');
-      await launch(response.url!);
-    } else {
-      throw 'Could not launch ${response.url}';
     }
   }
 
@@ -100,18 +85,6 @@ class _SignInState extends State<SignInScreen> {
               controller: _signInEmailController,
               onPressed: () {
                 _onSignInPress(context);
-              },
-            ),
-            SizedBox(height: 25.0),
-            RoundedLoadingButton(
-              color: Colors.black87,
-              child: const Text(
-                'Sign in with Github',
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
-              controller: _signInGithubController,
-              onPressed: () {
-                _onSignInWithGithub(context);
               },
             ),
             SizedBox(height: 15.0),
