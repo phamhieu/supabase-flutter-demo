@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:demoapp/Screens/welcome_screen.dart';
+import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
 import 'package:demoapp/constants.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -38,7 +38,7 @@ class _SignUpState extends State<SignUpScreen> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return WelcomeScreen(title);
+            return ProfileScreen(title);
           },
         ),
       );

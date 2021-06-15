@@ -1,35 +1,43 @@
+import 'dart:io';
+import 'dart:math';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotrue/gotrue.dart';
-import 'package:demoapp/Screens/signin_screen.dart';
+import 'package:demoapp/screens/signin_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
 import 'package:demoapp/constants.dart';
+import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
-class WelcomeScreen extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
+  ProfileScreen(this._appBarTitle, {Key? key}) : super(key: key);
+
   final String _appBarTitle;
 
-  WelcomeScreen(this._appBarTitle, {Key? key}) : super(key: key);
-
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState(_appBarTitle);
+  _ProfileScreenState createState() => _ProfileScreenState(_appBarTitle);
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
+  _ProfileScreenState(this._appBarTitle);
+
   final RoundedLoadingButtonController _signOutBtnController =
       new RoundedLoadingButtonController();
   final RoundedLoadingButtonController _updateProfileBtnController =
       new RoundedLoadingButtonController();
   final String _appBarTitle;
 
+  final _picker = ImagePicker();
+
   User? user;
   bool loadingProfile = true;
   String username = '';
   String website = '';
   String avatarUrl = '';
-
-  _WelcomeScreenState(this._appBarTitle);
 
   @override
   void initState() {
@@ -52,13 +60,34 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         .single()
         .execute();
     if (response.error == null && response.data != null) {
-      print(response.data);
       setState(() {
         username = response.data['username'] ?? '';
         website = response.data['website'] ?? '';
         avatarUrl = response.data['avatar_url'] ?? '';
         loadingProfile = false;
       });
+    }
+  }
+
+  final picker = ImagePicker();
+
+  Future updateAvatar(BuildContext context) async {
+    final pickedFile = await _picker.getImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      final fileExt = extension(file.path);
+      final fileName = '${getRandomStr(15)}$fileExt';
+
+      final response =
+          await supabaseClient.storage.from('avatars').upload(fileName, file);
+      if (response.error == null) {
+        setState(() {
+          avatarUrl = fileName;
+        });
+        _onUpdateProfilePress(context);
+      } else {
+        print(response.error!.message);
+      }
     }
   }
 
@@ -113,6 +142,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       );
     } else {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(this._appBarTitle),
         ),
@@ -122,7 +152,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 25.0),
+              AvatarContainer(avatarUrl, key: UniqueKey()),
+              ElevatedButton(
+                child: Text('Change avatar',
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
+                onPressed: () => updateAvatar(context),
+              ),
               TextFormField(
                 onChanged: (value) => setState(() {
                   username = value;
@@ -175,4 +210,75 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       );
     }
   }
+}
+
+class AvatarContainer extends StatefulWidget {
+  AvatarContainer(this.url, {Key? key}) : super(key: key);
+
+  final String url;
+
+  @override
+  _AvatarContainerState createState() => _AvatarContainerState(url);
+}
+
+class _AvatarContainerState extends State<AvatarContainer> {
+  _AvatarContainerState(this.url);
+
+  final String url;
+  Uint8List? image;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (url != '') {
+      downloadImage(url);
+    }
+  }
+
+  void downloadImage(String path) async {
+    final response =
+        await supabaseClient.storage.from('avatars').download(path);
+    if (response.error == null) {
+      setState(() {
+        image = response.data;
+      });
+    } else {
+      print(response.error!.message);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (image == null) {
+      return Container(
+        width: 125,
+        height: 125,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage('assets/images/noavatar.jpeg'),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        width: 125,
+        height: 125,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: MemoryImage(image!),
+          ),
+        ),
+      );
+    }
+  }
+}
+
+String getRandomStr(int length) {
+  const ch = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
+  Random r = Random();
+  return String.fromCharCodes(
+      Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
 }

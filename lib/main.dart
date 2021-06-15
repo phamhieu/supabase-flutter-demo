@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:demoapp/Screens/password_recover.dart';
-import 'package:demoapp/Screens/signin_screen.dart';
-import 'package:demoapp/Screens/signup_screen.dart';
-import 'package:demoapp/Screens/splash_screen.dart';
+import 'package:demoapp/screens/password_recover.dart';
+import 'package:demoapp/screens/signin_screen.dart';
+import 'package:demoapp/screens/signup_screen.dart';
+import 'package:demoapp/screens/splash_screen.dart';
 import 'package:demoapp/constants.dart';
 
 void main() {

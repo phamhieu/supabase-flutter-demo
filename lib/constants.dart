@@ -7,7 +7,7 @@ const String PASSWORDRECOVER_SCREEN = 'PASSWORDRECOVER_SCREEN';
 
 const PERSIST_SESSION_KEY = 'PERSIST_SESSION_KEY';
 
-const MAGIC_LINK_REDIRECT_URI = 'io.supabase.demoapp://login-callback';
+const OAUTH_REDIRECT_URI = 'io.supabase.demoapp://login-callback';
 
 /// TODO: Add your Supabase URL / ANNON KEY here
 const SUPABASE_URL = 'https://pgshhamktpsgnptsadwz.supabase.co';

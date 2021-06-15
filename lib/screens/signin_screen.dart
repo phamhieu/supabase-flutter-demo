@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gotrue/gotrue.dart';
-import 'package:demoapp/Screens/welcome_screen.dart';
+import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
 import 'package:demoapp/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,7 +38,7 @@ class _SignInState extends State<SignInScreen> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return WelcomeScreen(title);
+            return ProfileScreen(title);
           },
         ),
       );
