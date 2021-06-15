@@ -43,6 +43,9 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [
+            'appAuthRedirectScheme': 'io.supabase.demoapp'
+        ]
     }
 
     buildTypes {
