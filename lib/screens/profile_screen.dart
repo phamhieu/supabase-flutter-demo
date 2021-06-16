@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:demoapp/components/lifecycle_state.dart';
 import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,7 +22,7 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState(_appBarTitle);
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends LifecycleState<ProfileScreen> {
   _ProfileScreenState(this._appBarTitle);
 
   final RoundedLoadingButtonController _signOutBtnController =
