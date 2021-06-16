@@ -1,0 +1,8 @@
+const String SPLASH_SCREEN = 'SPLASH_SCREEN';
+const String SIGNIN_SCREEN = 'SIGNIN_SCREEN';
+const String SIGNUP_SCREEN = 'SIGNUP_SCREEN';
+const String PASSWORDRECOVER_SCREEN = 'PASSWORDRECOVER_SCREEN';
+
+const PERSIST_SESSION_KEY = 'PERSIST_SESSION_KEY';
+
+const OAUTH_REDIRECT_URI = 'io.supabase.demoapp://login-callback';

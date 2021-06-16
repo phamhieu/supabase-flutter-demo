@@ -1,7 +1,8 @@
+import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
-import 'package:demoapp/constants.dart';
+import 'package:demoapp/utils/constants.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

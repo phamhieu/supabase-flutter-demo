@@ -2,12 +2,13 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotrue/gotrue.dart';
 import 'package:demoapp/screens/signin_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
-import 'package:demoapp/constants.dart';
+import 'package:demoapp/utils/constants.dart';
 import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';

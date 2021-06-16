@@ -3,7 +3,7 @@ import 'package:demoapp/screens/password_recover.dart';
 import 'package:demoapp/screens/signin_screen.dart';
 import 'package:demoapp/screens/signup_screen.dart';
 import 'package:demoapp/screens/splash_screen.dart';
-import 'package:demoapp/constants.dart';
+import 'package:demoapp/utils/constants.dart';
 
 void main() {
   runApp(MyApp());
