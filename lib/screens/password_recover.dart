@@ -17,7 +17,8 @@ class _PasswordRecoverState extends State<PasswordRecoverScreen> {
   var email = '';
 
   void _onPasswordRecoverPress(BuildContext context) async {
-    final response = await supabaseClient.auth.api.resetPasswordForEmail(email);
+    final response =
+        await Supabase.client.auth.api.resetPasswordForEmail(email);
     if (response.error != null) {
       alertModal.show(context,
           title: 'Send password recovery failed',

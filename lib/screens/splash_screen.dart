@@ -47,19 +47,14 @@ class SplashScreenState extends State<SplashScreen>
       return showSignIn();
     }
 
-    /**
-     * TODO: we need a timer to call refresh session before the current session expired. 
-     * The default expiring time is 3600. Only in 1 hour
-     * */
-    final response = await supabaseClient.auth.recoverSession(jsonStr);
+    final response = await Supabase.client.auth.recoverSession(jsonStr);
     if (response.error != null) {
       prefs.remove(PERSIST_SESSION_KEY);
       return showSignIn();
+    } else {
+      final title = 'Welcome ${response.data!.user!.email}';
+      showWelcome(title);
     }
-
-    prefs.setString(PERSIST_SESSION_KEY, response.data!.persistSessionString);
-    final title = 'Welcome ${response.data!.user!.email}';
-    showWelcome(title);
   }
 
   @override

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
 import 'package:demoapp/utils/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -21,15 +20,12 @@ class _SignInState extends State<SignInScreen> {
 
   void _onSignInPress(BuildContext context) async {
     final response =
-        await supabaseClient.auth.signIn(email: email, password: password);
+        await Supabase.client.auth.signIn(email: email, password: password);
     if (response.error != null) {
       alertModal.show(context,
           title: 'Sign in failed', message: response.error!.message);
       _signInEmailController.reset();
     } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString(PERSIST_SESSION_KEY, response.data!.persistSessionString);
-
       final title = 'Welcome ${response.data!.user!.email}';
       Navigator.pushReplacement(
         context,

@@ -1,3 +1,4 @@
+import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/screens/password_recover.dart';
 import 'package:demoapp/screens/signin_screen.dart';
@@ -6,6 +7,11 @@ import 'package:demoapp/screens/splash_screen.dart';
 import 'package:demoapp/utils/constants.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // create singleton
+  Supabase();
+
   runApp(MyApp());
 }
 
