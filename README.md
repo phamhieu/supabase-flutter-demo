@@ -4,7 +4,7 @@ A Flutter project to demo supabase dart client.
 
 ## Getting Started
 
-Please update your `SUPABASE_URL` and `SUPABASE_ANNON_KEY` on `lib/constants.dart` before starting the app.
+Please update your `SUPABASE_URL` and `SUPABASE_ANNON_KEY` on `lib/utils/supabase.dart` before running the app.
 
 ## Database schema
 
