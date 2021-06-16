@@ -3,10 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase/supabase.dart';
 
 class Supabase {
-  /// TODO: Add your Supabase URL / ANNON KEY here
-  static const SUPABASE_URL = 'https://pgshhamktpsgnptsadwz.supabase.co';
-  static const SUPABASE_ANNON_KEY =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyMTg5OTA4MSwiZXhwIjoxOTM3NDc1MDgxfQ.qSW9CJnkqgrE2eh9yIU0coDEADNQDGamlNaPh-JxQTw';
+  /// TODO: Add your SUPABASE_URL / SUPABASE_KEY here
+  static const SUPABASE_URL = 'SUPABASE_URL';
+  static const SUPABASE_ANNON_KEY = 'SUPABASE_KEY';
   static final _client = SupabaseClient(SUPABASE_URL, SUPABASE_ANNON_KEY);
   static SupabaseClient get client => _client;
 
