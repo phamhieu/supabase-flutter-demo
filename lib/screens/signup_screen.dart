@@ -1,9 +1,11 @@
+import 'package:demoapp/components/auth_state.dart';
 import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
 import 'package:demoapp/utils/constants.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:supabase/supabase.dart' as supabase;
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key}) : super(key: key);
@@ -12,14 +14,15 @@ class SignUpScreen extends StatefulWidget {
   _SignUpState createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUpScreen> {
+class _SignUpState extends AuthState<SignUpScreen> {
   final RoundedLoadingButtonController _btnController =
       new RoundedLoadingButtonController();
   var email = '';
   var password = '';
 
   void _onSignUpPress(BuildContext context) async {
-    final response = await Supabase.client.auth.signUp(email, password);
+    final response = await Supabase.client.auth.signUp(email, password,
+        options: supabase.AuthOptions(redirectTo: AUTH_REDIRECT_URI));
     if (response.error != null) {
       alertModal.show(context,
           title: 'Sign up failed', message: response.error!.message);

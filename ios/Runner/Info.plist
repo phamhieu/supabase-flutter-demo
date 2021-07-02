@@ -48,7 +48,8 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>io.supabase.demoapp</string>
+					<!-- TODO: Add your SCHEME here -->
+					<string>io.supabase.flutterdemo</string>
 				</array>
       </dict>
    </array>

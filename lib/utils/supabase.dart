@@ -1,6 +1,7 @@
-import 'package:demoapp/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase/supabase.dart';
+
+const SUPABSE_PERSIST_SESSION_KEY = 'SUPABSE_PERSIST_SESSION_KEY';
 
 class Supabase {
   /// TODO: Add your SUPABASE_URL / SUPABASE_KEY here
@@ -8,6 +9,8 @@ class Supabase {
   static const SUPABASE_ANNON_KEY = 'SUPABASE_KEY';
   static final _client = SupabaseClient(SUPABASE_URL, SUPABASE_ANNON_KEY);
   static SupabaseClient get client => _client;
+
+  bool _initialUriIsHandled = false;
 
   Supabase._privateConstructor() {
     _client.auth.onAuthStateChange(_onAuthStateChange);
@@ -32,12 +35,24 @@ class Supabase {
   void _persistSession(String persistSessionString) async {
     print('***** persistSession persistSession persistSession');
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(PERSIST_SESSION_KEY, persistSessionString);
+    prefs.setString(SUPABSE_PERSIST_SESSION_KEY, persistSessionString);
   }
 
   void _removePersistSession() async {
     print('***** _removePersistSession _removePersistSession');
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(PERSIST_SESSION_KEY);
+    prefs.remove(SUPABSE_PERSIST_SESSION_KEY);
+  }
+
+  /// **ATTENTION**: `getInitialLink`/`getInitialUri` should be handled
+  /// ONLY ONCE in your app's lifetime, since it is not meant to change
+  /// throughout your app's life.
+  bool shouldHandleInitialUri() {
+    if (_initialUriIsHandled)
+      return false;
+    else {
+      _initialUriIsHandled = true;
+      return true;
+    }
   }
 }

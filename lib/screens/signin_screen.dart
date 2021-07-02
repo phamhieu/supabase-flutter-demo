@@ -1,3 +1,4 @@
+import 'package:demoapp/components/auth_state.dart';
 import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/screens/profile_screen.dart';
@@ -12,7 +13,7 @@ class SignInScreen extends StatefulWidget {
   _SignInState createState() => _SignInState();
 }
 
-class _SignInState extends State<SignInScreen> {
+class _SignInState extends AuthState<SignInScreen> {
   final RoundedLoadingButtonController _signInEmailController =
       new RoundedLoadingButtonController();
   var email = '';

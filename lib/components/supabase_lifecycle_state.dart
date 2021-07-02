@@ -1,9 +1,6 @@
-import 'package:demoapp/utils/constants.dart';
-import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class LifecycleState<T extends StatefulWidget> extends State<T>
+abstract class SupabaseLifecycleState<T extends StatefulWidget> extends State<T>
     with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
@@ -37,12 +34,5 @@ abstract class LifecycleState<T extends StatefulWidget> extends State<T>
     }
   }
 
-  void onResumed() async {
-    print('***** onResumed onResumed onResumed');
-    final prefs = await SharedPreferences.getInstance();
-    String? persistSessionString = prefs.getString(PERSIST_SESSION_KEY);
-    if (persistSessionString != null) {
-      await Supabase.client.auth.recoverSession(persistSessionString);
-    }
-  }
+  void onResumed();
 }

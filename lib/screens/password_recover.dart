@@ -1,8 +1,10 @@
 import 'package:demoapp/components/alert_modal.dart';
+import 'package:demoapp/components/auth_state.dart';
 import 'package:demoapp/utils/constants.dart';
 import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:supabase/supabase.dart' as supabase;
 
 class PasswordRecoverScreen extends StatefulWidget {
   PasswordRecoverScreen({Key? key}) : super(key: key);
@@ -11,14 +13,14 @@ class PasswordRecoverScreen extends StatefulWidget {
   _PasswordRecoverState createState() => _PasswordRecoverState();
 }
 
-class _PasswordRecoverState extends State<PasswordRecoverScreen> {
+class _PasswordRecoverState extends AuthState<PasswordRecoverScreen> {
   final RoundedLoadingButtonController _btnController =
       new RoundedLoadingButtonController();
   var email = '';
 
   void _onPasswordRecoverPress(BuildContext context) async {
-    final response =
-        await Supabase.client.auth.api.resetPasswordForEmail(email);
+    final response = await Supabase.client.auth.api.resetPasswordForEmail(email,
+        options: supabase.AuthOptions(redirectTo: AUTH_REDIRECT_URI));
     if (response.error != null) {
       alertModal.show(context,
           title: 'Send password recovery failed',
