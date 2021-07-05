@@ -5,22 +5,33 @@ import 'package:url_launcher/url_launcher.dart';
 const SUPABSE_PERSIST_SESSION_KEY = 'SUPABSE_PERSIST_SESSION_KEY';
 
 class Supabase {
-  /// TODO: Add your SUPABASE_URL / SUPABASE_KEY here
-  static const SUPABASE_URL = 'SUPABASE_URL';
-  static const SUPABASE_ANNON_KEY = 'SUPABASE_KEY';
-  static final _client = SupabaseClient(SUPABASE_URL, SUPABASE_ANNON_KEY);
-  static SupabaseClient get client => _client;
-
+  SupabaseClient? _client;
+  GotrueSubscription? _initialClientSubscription;
   bool _initialUriIsHandled = false;
 
-  Supabase._privateConstructor() {
-    _client.auth.onAuthStateChange(_onAuthStateChange);
-  }
+  Supabase._privateConstructor();
 
   static final Supabase _instance = Supabase._privateConstructor();
 
   factory Supabase() {
     return _instance;
+  }
+
+  SupabaseClient get client {
+    assert(_client == null, 'Supabase client is not initialized');
+    return _client!;
+  }
+
+  void initialClient(String supabaseUrl, String supabaseAnonKey) {
+    if (_client != null) {
+      if (_initialClientSubscription != null) {
+        _initialClientSubscription!.data!.unsubscribe();
+      }
+    }
+
+    _client = SupabaseClient(supabaseUrl, supabaseAnonKey);
+    _initialClientSubscription =
+        _client!.auth.onAuthStateChange(_onAuthStateChange);
   }
 
   void _onAuthStateChange(AuthChangeEvent event, Session? session) {

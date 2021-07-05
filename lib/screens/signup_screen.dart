@@ -21,7 +21,7 @@ class _SignUpState extends AuthState<SignUpScreen> {
   var password = '';
 
   void _onSignUpPress(BuildContext context) async {
-    final response = await Supabase.client.auth.signUp(email, password,
+    final response = await Supabase().client.auth.signUp(email, password,
         options: supabase.AuthOptions(redirectTo: AUTH_REDIRECT_URI));
     if (response.error != null) {
       alertModal.show(context,

@@ -72,7 +72,7 @@ mixin SupabaseDeepLinkingMixin<T extends StatefulWidget> on State<T> {
     // TODO: we should verify uri.host before handling as
     // 3rd party authentication deeplink if not we should ignore
 
-    final response = await Supabase.client.auth.getSessionFromUrl(uri);
+    final response = await Supabase().client.auth.getSessionFromUrl(uri);
     if (response.error != null) {
       onErrorHandlingAuthDeeplink(response.error!.message);
     } else {

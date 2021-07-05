@@ -6,11 +6,15 @@ import 'package:demoapp/screens/signup_screen.dart';
 import 'package:demoapp/screens/splash_screen.dart';
 import 'package:demoapp/utils/constants.dart';
 
+/// TODO: Add your SUPABASE_URL / SUPABASE_KEY here
+const SUPABASE_URL = 'SUPABASE_URL';
+const SUPABASE_ANNON_KEY = 'SUPABASE_KEY';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // create singleton
-  Supabase();
+  /// create Supabase singleton
+  Supabase().initialClient(SUPABASE_URL, SUPABASE_ANNON_KEY);
 
   runApp(MyApp());
 }

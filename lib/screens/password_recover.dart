@@ -19,7 +19,8 @@ class _PasswordRecoverState extends AuthState<PasswordRecoverScreen> {
   var email = '';
 
   void _onPasswordRecoverPress(BuildContext context) async {
-    final response = await Supabase.client.auth.api.resetPasswordForEmail(email,
+    final response = await Supabase().client.auth.api.resetPasswordForEmail(
+        email,
         options: supabase.AuthOptions(redirectTo: AUTH_REDIRECT_URI));
     if (response.error != null) {
       alertModal.show(context,

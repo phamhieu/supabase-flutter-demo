@@ -10,7 +10,7 @@ abstract class SupabaseAuthState<T extends StatefulWidget>
   @override
   void initState() {
     super.initState();
-    Supabase.client.auth.onAuthStateChange(_onAuthStateChange);
+    Supabase().client.auth.onAuthStateChange(_onAuthStateChange);
   }
 
   void _onAuthStateChange(AuthChangeEvent event, Session? session) {
@@ -43,7 +43,7 @@ abstract class SupabaseAuthState<T extends StatefulWidget>
       return onUnauthenticated();
     }
 
-    final response = await Supabase.client.auth.recoverSession(jsonStr);
+    final response = await Supabase().client.auth.recoverSession(jsonStr);
     if (response.error != null) {
       prefs.remove(SUPABSE_PERSIST_SESSION_KEY);
       return onUnauthenticated();
@@ -57,7 +57,7 @@ abstract class SupabaseAuthState<T extends StatefulWidget>
     final prefs = await SharedPreferences.getInstance();
     String? persistSessionString = prefs.getString(SUPABSE_PERSIST_SESSION_KEY);
     if (persistSessionString != null) {
-      await Supabase.client.auth.recoverSession(persistSessionString);
+      await Supabase().client.auth.recoverSession(persistSessionString);
     }
   }
 

@@ -13,7 +13,7 @@ class AuthState<T extends StatefulWidget> extends SupabaseAuthState<T> {
 
   @override
   void onAuthenticated(supabase.Session session) {
-    final title = 'Welcome ${Supabase.client.auth.currentUser!.email}';
+    final title = 'Welcome ${Supabase().client.auth.currentUser!.email}';
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
