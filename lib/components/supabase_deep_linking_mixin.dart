@@ -4,6 +4,7 @@ import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:supabase/supabase.dart';
 import 'package:uni_links/uni_links.dart';
 
 mixin SupabaseDeepLinkingMixin<T extends StatefulWidget> on State<T> {
@@ -26,18 +27,16 @@ mixin SupabaseDeepLinkingMixin<T extends StatefulWidget> on State<T> {
   /// while already started.
   void _handleIncomingLinks() {
     if (!kIsWeb) {
-      print('_handleIncomingLinks called');
       // It will handle app links while the app is already started - be it in
       // the foreground or in the background.
       _sub = uriLinkStream.listen((Uri? uri) {
         if (mounted && uri != null) {
-          print('got uri: $uri');
-          onHandleDeepLink(uri);
-          _handleDeepLink(uri);
+          onReceivedDeeplink(uri);
+          _handleDeeplink(uri);
         }
       }, onError: (Object err) {
         if (!mounted) return;
-        print('got err: $err');
+        onErrorReceivingDeeplink(err.toString());
       });
     }
   }
@@ -52,36 +51,48 @@ mixin SupabaseDeepLinkingMixin<T extends StatefulWidget> on State<T> {
   Future<void> _handleInitialUri() async {
     if (!Supabase().shouldHandleInitialUri()) return;
 
-    print('_handleInitialUri called');
     try {
       final uri = await getInitialUri();
-      if (uri != null) {
-        print('got initial uri: $uri');
-        if (mounted) {
-          onHandleDeepLink(uri);
-          _handleDeepLink(uri);
-        }
+      if (mounted && uri != null) {
+        onReceivedDeeplink(uri);
+        _handleDeeplink(uri);
       }
     } on PlatformException {
       // Platform messages may fail but we ignore the exception
-      print('falied to get initial uri');
     } on FormatException catch (err) {
       if (!mounted) return;
-      print('malformed initial uri: $err');
+      onErrorReceivingDeeplink(err.message);
     }
   }
 
-  void _handleDeepLink(Uri uri) async {
+  void _handleDeeplink(Uri uri) async {
     print('uri.scheme: ${uri.scheme}');
     print('uri.host: ${uri.host}');
 
-    await Supabase.client.auth.getSessionFromUrl(uri);
-    onHandledDeepLink();
+    // TODO: we should verify uri.host before handling as
+    // 3rd party authentication deeplink if not we should ignore
+
+    final response = await Supabase.client.auth.getSessionFromUrl(uri);
+    if (response.error != null) {
+      onErrorHandlingAuthDeeplink(response.error!.message);
+    } else {
+      onHandledAuthDeeplink(response.data!);
+    }
   }
 
-  // As a notify that deep link received and is processing
-  void onHandleDeepLink(Uri uri) {}
+  // As a callback when deeplink received and is processing
+  void onReceivedDeeplink(Uri uri) {
+    print('onReceivedDeepLink uri: $uri');
+  }
+
+  // As a callback when deeplink receiving throw error
+  void onErrorReceivingDeeplink(String message) {
+    print('onErrorReceivingDeppLink message: $message');
+  }
+
+  /// As a callback when authenticating with deeplink failed
+  void onErrorHandlingAuthDeeplink(String message);
 
   // As a callback after deep link handled
-  void onHandledDeepLink() {}
+  void onHandledAuthDeeplink(Session session);
 }

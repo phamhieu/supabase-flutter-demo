@@ -13,13 +13,20 @@ abstract class SupabaseAuthState<T extends StatefulWidget>
     Supabase.client.auth.onAuthStateChange(_onAuthStateChange);
   }
 
-  @override
-  void onHandledDeepLink() {}
-
   void _onAuthStateChange(AuthChangeEvent event, Session? session) {
     if (event == AuthChangeEvent.passwordRecovery && session != null) {
       onPasswordRecovery(session);
     }
+  }
+
+  @override
+  void onHandledAuthDeeplink(Session session) {
+    onAuthenticated(session);
+  }
+
+  @override
+  void onErrorHandlingAuthDeeplink(String message) {
+    onErrorAuthenticating(message);
   }
 
   /// This method helps recover/refresh session if it's available
@@ -57,4 +64,5 @@ abstract class SupabaseAuthState<T extends StatefulWidget>
   void onUnauthenticated();
   void onAuthenticated(Session session);
   void onPasswordRecovery(Session session);
+  void onErrorAuthenticating(String message);
 }

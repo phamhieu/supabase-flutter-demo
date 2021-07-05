@@ -5,6 +5,7 @@ import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
 import 'package:demoapp/utils/constants.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:supabase/supabase.dart' as supabase;
 
 class SignInScreen extends StatefulWidget {
   SignInScreen({Key? key}) : super(key: key);
@@ -16,6 +17,8 @@ class SignInScreen extends StatefulWidget {
 class _SignInState extends AuthState<SignInScreen> {
   final RoundedLoadingButtonController _signInEmailController =
       new RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _githubSignInController =
+      RoundedLoadingButtonController();
   var email = '';
   var password = '';
 
@@ -37,6 +40,15 @@ class _SignInState extends AuthState<SignInScreen> {
         ),
       );
     }
+  }
+
+  void _githubSigninPressed(BuildContext context) async {
+    await Supabase.client.auth.signInWithProvider(
+      supabase.Provider.github,
+      options: supabase.AuthOptions(
+        redirectTo: AUTH_REDIRECT_URI,
+      ),
+    );
   }
 
   @override
@@ -83,6 +95,18 @@ class _SignInState extends AuthState<SignInScreen> {
               controller: _signInEmailController,
               onPressed: () {
                 _onSignInPress(context);
+              },
+            ),
+            SizedBox(height: 15.0),
+            RoundedLoadingButton(
+              color: Colors.green,
+              child: const Text(
+                'Github Login',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+              controller: _githubSignInController,
+              onPressed: () {
+                _githubSigninPressed(context);
               },
             ),
             SizedBox(height: 15.0),

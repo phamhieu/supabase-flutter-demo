@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase/supabase.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const SUPABSE_PERSIST_SESSION_KEY = 'SUPABSE_PERSIST_SESSION_KEY';
 
@@ -54,5 +55,16 @@ class Supabase {
       _initialUriIsHandled = true;
       return true;
     }
+  }
+}
+
+extension GoTrueClientSignInProvider on GoTrueClient {
+  Future<bool> signInWithProvider(Provider? provider,
+      {AuthOptions? options}) async {
+    final res = await signIn(
+      provider: provider,
+      options: options,
+    );
+    return await launch(res.url!);
   }
 }

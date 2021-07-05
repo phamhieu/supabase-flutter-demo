@@ -29,4 +29,9 @@ class AuthState<T extends StatefulWidget> extends SupabaseAuthState<T> {
     // TODO: show password change screen
     throw UnimplementedError();
   }
+
+  @override
+  void onErrorAuthenticating(String message) {
+    // TODO: implement onErrorAuthenticating
+  }
 }
