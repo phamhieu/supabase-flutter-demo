@@ -1,5 +1,4 @@
 import 'package:demoapp/components/supabase_auth_state.dart';
-import 'package:demoapp/components/supabase_singleton.dart';
 import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ class AuthState<T extends StatefulWidget> extends SupabaseAuthState<T> {
 
   @override
   void onAuthenticated(supabase.Session session) {
-    final title = 'Welcome ${Supabase().client.auth.currentUser!.email}';
+    final title = 'Welcome ${mySupabase.client.auth.currentUser!.email}';
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

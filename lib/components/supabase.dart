@@ -5,33 +5,37 @@ import 'package:url_launcher/url_launcher.dart';
 const SUPABSE_PERSIST_SESSION_KEY = 'SUPABSE_PERSIST_SESSION_KEY';
 
 class Supabase {
-  SupabaseClient? _client;
+  SupabaseClient _client = SupabaseClient('', '');
   GotrueSubscription? _initialClientSubscription;
   bool _initialUriIsHandled = false;
 
-  Supabase._privateConstructor();
+  Supabase(String supabaseUrl, String supabaseAnonKey) {
+    _client = SupabaseClient(supabaseUrl, supabaseAnonKey);
+    _initialClientSubscription =
+        _client.auth.onAuthStateChange(_onAuthStateChange);
+  }
 
-  static final Supabase _instance = Supabase._privateConstructor();
-
-  factory Supabase() {
-    return _instance;
+  void dispose() {
+    if (_initialClientSubscription != null) {
+      _initialClientSubscription!.data!.unsubscribe();
+    }
   }
 
   SupabaseClient get client {
-    assert(_client == null, 'Supabase client is not initialized');
-    return _client!;
+    print('***** get Supabase client');
+    return _client;
   }
 
-  void initialClient(String supabaseUrl, String supabaseAnonKey) {
-    if (_client != null) {
-      if (_initialClientSubscription != null) {
-        _initialClientSubscription!.data!.unsubscribe();
-      }
+  void initialClient(String supabaseUrl, String supabaseAnonKey) async {
+    print('***** initialClient initialClient initialClient');
+
+    if (_initialClientSubscription != null) {
+      _initialClientSubscription!.data!.unsubscribe();
     }
 
     _client = SupabaseClient(supabaseUrl, supabaseAnonKey);
     _initialClientSubscription =
-        _client!.auth.onAuthStateChange(_onAuthStateChange);
+        _client.auth.onAuthStateChange(_onAuthStateChange);
   }
 
   void _onAuthStateChange(AuthChangeEvent event, Session? session) {

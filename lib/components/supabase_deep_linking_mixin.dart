@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:demoapp/components/supabase_singleton.dart';
+import 'package:demoapp/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,7 +49,7 @@ mixin SupabaseDeepLinkingMixin<T extends StatefulWidget> on State<T> {
   ///
   /// We handle all exceptions, since it is called from initState.
   Future<void> _handleInitialUri() async {
-    if (!Supabase().shouldHandleInitialUri()) return;
+    if (!mySupabase.shouldHandleInitialUri()) return;
 
     try {
       final uri = await getInitialUri();
@@ -72,7 +72,7 @@ mixin SupabaseDeepLinkingMixin<T extends StatefulWidget> on State<T> {
     // TODO: we should verify uri.host before handling as
     // 3rd party authentication deeplink if not we should ignore
 
-    final response = await Supabase().client.auth.getSessionFromUrl(uri);
+    final response = await mySupabase.client.auth.getSessionFromUrl(uri);
     if (response.error != null) {
       onErrorHandlingAuthDeeplink(response.error!.message);
     } else {

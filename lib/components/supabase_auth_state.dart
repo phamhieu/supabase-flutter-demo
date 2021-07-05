@@ -1,6 +1,7 @@
 import 'package:demoapp/components/supabase_deep_linking_mixin.dart';
 import 'package:demoapp/components/supabase_lifecycle_state.dart';
-import 'package:demoapp/components/supabase_singleton.dart';
+import 'package:demoapp/components/supabase.dart';
+import 'package:demoapp/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase/supabase.dart';
@@ -10,7 +11,7 @@ abstract class SupabaseAuthState<T extends StatefulWidget>
   @override
   void initState() {
     super.initState();
-    Supabase().client.auth.onAuthStateChange(_onAuthStateChange);
+    mySupabase.client.auth.onAuthStateChange(_onAuthStateChange);
   }
 
   void _onAuthStateChange(AuthChangeEvent event, Session? session) {
@@ -43,7 +44,7 @@ abstract class SupabaseAuthState<T extends StatefulWidget>
       return onUnauthenticated();
     }
 
-    final response = await Supabase().client.auth.recoverSession(jsonStr);
+    final response = await mySupabase.client.auth.recoverSession(jsonStr);
     if (response.error != null) {
       prefs.remove(SUPABSE_PERSIST_SESSION_KEY);
       return onUnauthenticated();
@@ -57,7 +58,7 @@ abstract class SupabaseAuthState<T extends StatefulWidget>
     final prefs = await SharedPreferences.getInstance();
     String? persistSessionString = prefs.getString(SUPABSE_PERSIST_SESSION_KEY);
     if (persistSessionString != null) {
-      await Supabase().client.auth.recoverSession(persistSessionString);
+      await mySupabase.client.auth.recoverSession(persistSessionString);
     }
   }
 

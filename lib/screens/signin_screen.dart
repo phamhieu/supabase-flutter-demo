@@ -1,5 +1,5 @@
 import 'package:demoapp/components/auth_state.dart';
-import 'package:demoapp/components/supabase_singleton.dart';
+import 'package:demoapp/components/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
@@ -24,7 +24,7 @@ class _SignInState extends AuthState<SignInScreen> {
 
   void _onSignInPress(BuildContext context) async {
     final response =
-        await Supabase().client.auth.signIn(email: email, password: password);
+        await mySupabase.client.auth.signIn(email: email, password: password);
     if (response.error != null) {
       alertModal.show(context,
           title: 'Sign in failed', message: response.error!.message);
@@ -43,12 +43,12 @@ class _SignInState extends AuthState<SignInScreen> {
   }
 
   void _githubSigninPressed(BuildContext context) async {
-    await Supabase().client.auth.signInWithProvider(
-          supabase.Provider.github,
-          options: supabase.AuthOptions(
-            redirectTo: AUTH_REDIRECT_URI,
-          ),
-        );
+    await mySupabase.client.auth.signInWithProvider(
+      supabase.Provider.github,
+      options: supabase.AuthOptions(
+        redirectTo: AUTH_REDIRECT_URI,
+      ),
+    );
   }
 
   @override
