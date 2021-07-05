@@ -1,5 +1,5 @@
 import 'package:demoapp/components/auth_state.dart';
-import 'package:demoapp/utils/supabase.dart';
+import 'package:demoapp/components/supabase_singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:demoapp/utils/supabase.dart';
+import 'package:demoapp/components/supabase_singleton.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

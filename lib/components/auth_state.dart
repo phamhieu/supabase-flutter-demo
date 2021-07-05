@@ -1,7 +1,7 @@
 import 'package:demoapp/components/supabase_auth_state.dart';
+import 'package:demoapp/components/supabase_singleton.dart';
 import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/utils/constants.dart';
-import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart' as supabase;
 

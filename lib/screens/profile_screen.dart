@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:demoapp/utils/supabase.dart';
+import 'package:demoapp/components/supabase_singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotrue/gotrue.dart';

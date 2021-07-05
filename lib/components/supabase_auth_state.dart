@@ -1,6 +1,6 @@
 import 'package:demoapp/components/supabase_deep_linking_mixin.dart';
 import 'package:demoapp/components/supabase_lifecycle_state.dart';
-import 'package:demoapp/utils/supabase.dart';
+import 'package:demoapp/components/supabase_singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase/supabase.dart';

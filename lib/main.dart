@@ -1,4 +1,4 @@
-import 'package:demoapp/utils/supabase.dart';
+import 'package:demoapp/components/supabase_singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/screens/password_recover.dart';
 import 'package:demoapp/screens/signin_screen.dart';
