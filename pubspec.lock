@@ -392,6 +392,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.1-dev.26"
+  supabase_flutter:
+    dependency: "direct main"
+    description:
+      path: "../supabase-flutter"
+      relative: true
+    source: path
+    version: "0.0.1"
   term_glyph:
     dependency: transitive
     description:

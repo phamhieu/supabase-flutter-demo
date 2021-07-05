@@ -4,6 +4,7 @@ import 'package:demoapp/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:supabase/supabase.dart' as supabase;
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PasswordRecoverScreen extends StatefulWidget {
   PasswordRecoverScreen({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _PasswordRecoverState extends AuthState<PasswordRecoverScreen> {
   var email = '';
 
   void _onPasswordRecoverPress(BuildContext context) async {
-    final response = await mySupabase.client.auth.api.resetPasswordForEmail(
+    final response = await Supabase().client.auth.api.resetPasswordForEmail(
         email,
         options: supabase.AuthOptions(redirectTo: AUTH_REDIRECT_URI));
     if (response.error != null) {

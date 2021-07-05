@@ -5,6 +5,7 @@ import 'package:demoapp/components/alert_modal.dart';
 import 'package:demoapp/utils/constants.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:supabase/supabase.dart' as supabase;
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class _SignUpState extends AuthState<SignUpScreen> {
   var password = '';
 
   void _onSignUpPress(BuildContext context) async {
-    final response = await mySupabase.client.auth.signUp(email, password,
+    final response = await Supabase().client.auth.signUp(email, password,
         options: supabase.AuthOptions(redirectTo: AUTH_REDIRECT_URI));
     if (response.error != null) {
       alertModal.show(context,

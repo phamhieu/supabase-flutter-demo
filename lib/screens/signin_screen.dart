@@ -1,11 +1,11 @@
 import 'package:demoapp/components/auth_state.dart';
-import 'package:demoapp/components/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/screens/profile_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
 import 'package:demoapp/utils/constants.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:supabase/supabase.dart' as supabase;
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignInScreen extends StatefulWidget {
   SignInScreen({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ class _SignInState extends AuthState<SignInScreen> {
 
   void _onSignInPress(BuildContext context) async {
     final response =
-        await mySupabase.client.auth.signIn(email: email, password: password);
+        await Supabase().client.auth.signIn(email: email, password: password);
     if (response.error != null) {
       alertModal.show(context,
           title: 'Sign in failed', message: response.error!.message);
@@ -43,12 +43,12 @@ class _SignInState extends AuthState<SignInScreen> {
   }
 
   void _githubSigninPressed(BuildContext context) async {
-    await mySupabase.client.auth.signInWithProvider(
-      supabase.Provider.github,
-      options: supabase.AuthOptions(
-        redirectTo: AUTH_REDIRECT_URI,
-      ),
-    );
+    await Supabase().client.auth.signInWithProvider(
+          supabase.Provider.github,
+          options: supabase.AuthOptions(
+            redirectTo: AUTH_REDIRECT_URI,
+          ),
+        );
   }
 
   @override
