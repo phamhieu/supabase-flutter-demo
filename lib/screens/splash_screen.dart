@@ -11,6 +11,8 @@ class SplashScreen extends StatefulWidget {
 
 class SplashScreenState extends AuthState<SplashScreen>
     with SingleTickerProviderStateMixin {
+  Timer? recoverSessionTimer;
+
   @override
   void initState() {
     super.initState();
@@ -18,9 +20,20 @@ class SplashScreenState extends AuthState<SplashScreen>
     /// a timer to slow down session restore
     /// If not user can't really see the splash screen
     var _duration = new Duration(seconds: 1);
-    new Timer(_duration, () {
+    recoverSessionTimer = new Timer(_duration, () {
+      print('***** splash screen trigger recoverSupabaseSession');
       this.recoverSupabaseSession();
     });
+  }
+
+  /// on received auth deeplink, we should cancel recoverSessionTimer
+  /// and wait for auth deep link handling result
+  @override
+  void onReceivedAuthDeeplink(Uri uri) {
+    print('***** splash screen onReceivedAuthDeeplink ${uri.toString()}');
+    if (recoverSessionTimer != null) {
+      recoverSessionTimer!.cancel();
+    }
   }
 
   @override

@@ -93,9 +93,7 @@ class _SignInState extends AuthState<SignInScreen> {
 
     await Supabase().client.auth.signInWithProvider(
           supabase.Provider.github,
-          options: supabase.AuthOptions(
-            redirectTo: AUTH_REDIRECT_URI,
-          ),
+          options: supabase.AuthOptions(redirectTo: AUTH_REDIRECT_URI),
         );
   }
 
