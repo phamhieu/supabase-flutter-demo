@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotrue/gotrue.dart';
 import 'package:demoapp/screens/signin_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
@@ -23,6 +22,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   _ProfileScreenState(this._appBarTitle);
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final RoundedLoadingButtonController _signOutBtnController =
       new RoundedLoadingButtonController();
@@ -128,7 +129,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     _updateProfileBtnController.reset();
-    Fluttertoast.showToast(msg: "profile updated", fontSize: 16.0);
+    showMessage("profile updated");
+  }
+
+  void showMessage(String message) {
+    final snackbar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(scaffoldKey.currentContext!).showSnackBar(snackbar);
   }
 
   @override
@@ -147,6 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     } else {
       return Scaffold(
+        key: scaffoldKey,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(this._appBarTitle),
