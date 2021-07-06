@@ -14,7 +14,7 @@ void main() {
   Supabase(
       url: SUPABASE_URL,
       anonKey: SUPABASE_ANNON_KEY,
-      authCallbackUrlHost: 'login-callback');
+      authCallbackUrlHostname: 'login-callback');
 
   runApp(MyApp());
 }
