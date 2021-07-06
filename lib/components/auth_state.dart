@@ -7,11 +7,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AuthState<T extends StatefulWidget> extends SupabaseAuthState<T> {
   @override
   void onUnauthenticated() {
+    print('***** onUnauthenticated');
     Navigator.of(context).pushReplacementNamed(SIGNIN_SCREEN);
   }
 
   @override
   void onAuthenticated(supabase.Session session) {
+    print('***** onAuthenticated: $session');
     final title = 'Welcome ${Supabase().client.auth.currentUser!.email}';
     Navigator.pushReplacement(
       context,
@@ -25,12 +27,14 @@ class AuthState<T extends StatefulWidget> extends SupabaseAuthState<T> {
 
   @override
   void onPasswordRecovery(supabase.Session session) {
+    print('***** onPasswordRecovery: $session');
     // TODO: show password change screen
-    throw UnimplementedError();
+    // throw UnimplementedError();
   }
 
   @override
   void onErrorAuthenticating(String message) {
+    print('***** onErrorAuthenticating: $message');
     // TODO: implement onErrorAuthenticating
   }
 }

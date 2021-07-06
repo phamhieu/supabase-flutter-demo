@@ -22,6 +22,12 @@ class _SignInState extends AuthState<SignInScreen> {
   var email = '';
   var password = '';
 
+  @override
+  void onErrorAuthenticating(String message) {
+    alertModal.show(context, title: 'Sign in failed', message: message);
+    _githubSignInController.reset();
+  }
+
   void _onSignInPress(BuildContext context) async {
     final response =
         await Supabase().client.auth.signIn(email: email, password: password);
