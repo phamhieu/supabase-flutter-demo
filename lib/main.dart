@@ -27,11 +27,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Supabase Demo',
-      home: SplashScreen(),
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
+      initialRoute: '/',
       routes: <String, WidgetBuilder>{
+        '/': (_) => SplashScreen(),
         '/signIn': (context) => SignInScreen(),
         '/signUp': (context) => SignUpScreen(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
