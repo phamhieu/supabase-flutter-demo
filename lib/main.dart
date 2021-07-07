@@ -12,9 +12,10 @@ void main() {
   // init Supabase singleton
   print('***** main init Supabase');
   Supabase(
-      url: SUPABASE_URL,
-      anonKey: SUPABASE_ANNON_KEY,
-      authCallbackUrlHostname: 'login-callback');
+    url: SUPABASE_URL,
+    anonKey: SUPABASE_ANNON_KEY,
+    authCallbackUrlHostname: 'login-callback',
+  );
 
   runApp(MyApp());
 }
