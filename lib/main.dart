@@ -1,5 +1,6 @@
+import 'package:demoapp/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:demoapp/screens/password_recover.dart';
+import 'package:demoapp/screens/forgot_password.dart';
 import 'package:demoapp/screens/signin_screen.dart';
 import 'package:demoapp/screens/signup_screen.dart';
 import 'package:demoapp/screens/splash_screen.dart';
@@ -12,8 +13,8 @@ void main() {
   // init Supabase singleton
   print('***** main init Supabase');
   Supabase(
-    url: SUPABASE_URL,
-    anonKey: SUPABASE_ANNON_KEY,
+    url: supabaseUrl,
+    anonKey: supabaseAnnonKey,
     authCallbackUrlHostname: 'login-callback',
   );
 
@@ -31,10 +32,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       routes: <String, WidgetBuilder>{
-        SIGNIN_SCREEN: (BuildContext context) => SignInScreen(),
-        SIGNUP_SCREEN: (BuildContext context) => SignUpScreen(),
-        PASSWORDRECOVER_SCREEN: (BuildContext context) =>
-            PasswordRecoverScreen(),
+        '/signIn': (context) => SignInScreen(),
+        '/signUp': (context) => SignUpScreen(),
+        '/forgotPassword': (context) => const ForgotPasswordScreen(),
+        '/profile': (context) => ProfileScreen(),
       },
     );
   }

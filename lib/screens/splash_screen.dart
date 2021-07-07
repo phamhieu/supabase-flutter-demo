@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
-  SplashScreenState createState() => new SplashScreenState();
+  SplashScreenState createState() => SplashScreenState();
 }
 
 class SplashScreenState extends AuthState<SplashScreen>
@@ -19,10 +19,10 @@ class SplashScreenState extends AuthState<SplashScreen>
 
     /// a timer to slow down session restore
     /// If not user can't really see the splash screen
-    var _duration = new Duration(seconds: 1);
-    recoverSessionTimer = new Timer(_duration, () {
+    const _duration = Duration(seconds: 1);
+    recoverSessionTimer = Timer(_duration, () {
       print('***** splash screen trigger recoverSupabaseSession');
-      this.recoverSupabaseSession();
+      recoverSupabaseSession();
     });
   }
 
@@ -40,12 +40,10 @@ class SplashScreenState extends AuthState<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          child: SizedBox(
-            height: 50.0,
-            child: Image.asset(
-              "assets/images/logo-light.png",
-            ),
+        child: SizedBox(
+          height: 50.0,
+          child: Image.asset(
+            "assets/images/logo-light.png",
           ),
         ),
       ),

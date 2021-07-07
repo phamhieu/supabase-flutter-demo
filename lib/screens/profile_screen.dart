@@ -4,37 +4,31 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:gotrue/gotrue.dart';
-import 'package:demoapp/screens/signin_screen.dart';
-import 'package:demoapp/components/alert_modal.dart';
 import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen(this._appBarTitle, {Key? key}) : super(key: key);
-
-  final String _appBarTitle;
-
   @override
-  _ProfileScreenState createState() => _ProfileScreenState(_appBarTitle);
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  _ProfileScreenState(this._appBarTitle);
+  _ProfileScreenState();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final RoundedLoadingButtonController _signOutBtnController =
-      new RoundedLoadingButtonController();
+      RoundedLoadingButtonController();
   final RoundedLoadingButtonController _updateProfileBtnController =
-      new RoundedLoadingButtonController();
-  final String _appBarTitle;
+      RoundedLoadingButtonController();
 
   final _picker = ImagePicker();
 
   User? user;
   bool loadingProfile = true;
+  String _appBarTitle = '';
   String username = '';
   String website = '';
   String avatarUrl = '';
@@ -43,16 +37,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
 
-    final clientUser = Supabase().client.auth.user();
-    if (clientUser != null) {
+    final _user = Supabase().client.auth.user();
+    if (_user != null) {
       setState(() {
-        user = clientUser;
+        _appBarTitle = 'Welcome ${_user.email}';
+        user = _user;
       });
-      loadProfile(clientUser.id);
+      loadProfile(_user.id);
     }
   }
 
-  void loadProfile(String userId) async {
+  Future<bool> loadProfile(String userId) async {
     final response = await Supabase()
         .client
         .from('profiles')
@@ -62,9 +57,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         .execute();
     if (response.error == null && response.data != null) {
       setState(() {
-        username = response.data['username'] ?? '';
-        website = response.data['website'] ?? '';
-        avatarUrl = response.data['avatar_url'] ?? '';
+        username = response.data['username'] as String? ?? '';
+        website = response.data['website'] as String? ?? '';
+        avatarUrl = response.data['avatar_url'] as String? ?? '';
         loadingProfile = false;
       });
     } else {
@@ -72,6 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         loadingProfile = false;
       });
     }
+    return true;
   }
 
   final picker = ImagePicker();
@@ -99,20 +95,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  void _onSignOutPress(BuildContext context) async {
+  Future<bool> _onSignOutPress(BuildContext context) async {
     await Supabase().client.auth.signOut();
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return SignInScreen();
-        },
-      ),
-    );
+    Navigator.pushReplacementNamed(context, '/signIn');
+    return true;
   }
 
-  void _onUpdateProfilePress(BuildContext context) async {
+  Future<bool> _onUpdateProfilePress(BuildContext context) async {
     final updates = {
       'id': user?.id,
       'username': username,
@@ -124,12 +113,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final response =
         await Supabase().client.from('profiles').upsert(updates).execute();
     if (response.error != null) {
-      alertModal.show(context,
-          title: 'Update profile failed', message: response.error!.message);
+      showMessage("Update profile failed: ${response.error!.message}");
+      _updateProfileBtnController.reset();
+      return false;
+    } else {
+      _updateProfileBtnController.reset();
+      showMessage("Profile updated!");
+      return true;
     }
-
-    _updateProfileBtnController.reset();
-    showMessage("profile updated");
   }
 
   void showMessage(String message) {
@@ -142,11 +133,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (loadingProfile) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(this._appBarTitle),
+          title: Text(_appBarTitle),
         ),
         body: SizedBox(
           height: MediaQuery.of(context).size.height / 1.3,
-          child: Center(
+          child: const Center(
             child: CircularProgressIndicator(),
           ),
         ),
@@ -156,19 +147,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         key: scaffoldKey,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text(this._appBarTitle),
+          title: Text(_appBarTitle),
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               AvatarContainer(avatarUrl, key: Key(avatarUrl)),
               ElevatedButton(
-                child: Text('Change avatar',
-                    style: TextStyle(fontSize: 20, color: Colors.white)),
                 onPressed: () => updateAvatar(context),
+                child: const Text('Change avatar',
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
               ),
               TextFormField(
                 onChanged: (value) => setState(() {
@@ -176,7 +165,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }),
                 initialValue: username,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Username',
                   hintText: '',
                 ),
@@ -187,34 +176,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }),
                 initialValue: website,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Website',
                   hintText: '',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 35.0,
               ),
               RoundedLoadingButton(
                 color: Colors.green,
-                child: Text('Update profile',
-                    style: TextStyle(fontSize: 20, color: Colors.white)),
                 controller: _updateProfileBtnController,
                 onPressed: () {
                   _onUpdateProfilePress(context);
                 },
+                child: const Text('Update profile',
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15.0,
               ),
               RoundedLoadingButton(
                 color: Colors.red,
-                child: Text('Sign out',
-                    style: TextStyle(fontSize: 20, color: Colors.white)),
                 controller: _signOutBtnController,
                 onPressed: () {
                   _onSignOutPress(context);
                 },
+                child: const Text('Sign out',
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
               ),
             ],
           ),
@@ -225,38 +214,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class AvatarContainer extends StatefulWidget {
-  AvatarContainer(this.url, {Key? key}) : super(key: key);
-
   final String url;
+  const AvatarContainer(this.url, {Key? key}) : super(key: key);
 
   @override
-  _AvatarContainerState createState() => _AvatarContainerState(url);
+  _AvatarContainerState createState() => _AvatarContainerState();
 }
 
 class _AvatarContainerState extends State<AvatarContainer> {
-  _AvatarContainerState(this.url);
+  _AvatarContainerState();
 
-  final String url;
   Uint8List? image;
 
   @override
   void initState() {
     super.initState();
 
-    if (url != '') {
-      downloadImage(url);
+    if (widget.url != '') {
+      downloadImage(widget.url);
     }
   }
 
-  void downloadImage(String path) async {
+  Future<bool> downloadImage(String path) async {
     final response =
         await Supabase().client.storage.from('avatars').download(path);
     if (response.error == null) {
       setState(() {
         image = response.data;
       });
+      return true;
     } else {
       print(response.error!.message);
+      return false;
     }
   }
 
@@ -266,7 +255,7 @@ class _AvatarContainerState extends State<AvatarContainer> {
       return Container(
         width: 125,
         height: 125,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
             image: AssetImage('assets/images/noavatar.jpeg'),
@@ -290,7 +279,7 @@ class _AvatarContainerState extends State<AvatarContainer> {
 
 String getRandomStr(int length) {
   const ch = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
-  Random r = Random();
+  final Random r = Random();
   return String.fromCharCodes(
       Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
 }

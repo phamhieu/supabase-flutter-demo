@@ -21,20 +21,20 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  cupertino_icons: ^1.0.3
   flutter:
     sdk: flutter
-  supabase_flutter: ^0.0.1-dev.1
-  cupertino_icons: ^1.0.3
-  email_validator: ^2.0.1
-  rounded_loading_button: ^2.0.5
-  supabase: ^0.0.1-dev.27
   image_picker: ^0.8.0+3
   path: ^1.8.0
+  rounded_loading_button: ^2.0.5
+  supabase: ^0.0.1-dev.27
+  supabase_flutter: ^0.0.1-dev.1
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.9.0
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.9.0
+  lint: ^1.5.3
 
 flutter_icons:
   android: "launcher_icon"

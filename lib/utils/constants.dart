@@ -1,9 +1,6 @@
-const String SIGNIN_SCREEN = 'SIGNIN_SCREEN';
-const String SIGNUP_SCREEN = 'SIGNUP_SCREEN';
-const String PASSWORDRECOVER_SCREEN = 'PASSWORDRECOVER_SCREEN';
-
-const AUTH_REDIRECT_URI = 'io.supabase.flutterdemo://login-callback';
+/// TODO: update with your custom SCHEME and HOSTNAME
+const authRedirectUri = 'io.supabase.flutterdemo://login-callback';
 
 /// TODO: Add your SUPABASE_URL / SUPABASE_KEY here
-const SUPABASE_URL = 'SUPABASE_URL';
-const SUPABASE_ANNON_KEY = 'SUPABASE_KEY';
+const supabaseUrl = 'SUPABASE_URL';
+const supabaseAnnonKey = 'SUPABASE_KEY';
