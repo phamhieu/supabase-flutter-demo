@@ -1,16 +1,21 @@
-import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/screens/password_recover.dart';
 import 'package:demoapp/screens/signin_screen.dart';
 import 'package:demoapp/screens/signup_screen.dart';
 import 'package:demoapp/screens/splash_screen.dart';
 import 'package:demoapp/utils/constants.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // create singleton
-  Supabase();
+  // init Supabase singleton
+  print('***** main init Supabase');
+  Supabase(
+    url: SUPABASE_URL,
+    anonKey: SUPABASE_ANNON_KEY,
+    authCallbackUrlHostname: 'login-callback',
+  );
 
   runApp(MyApp());
 }
@@ -26,7 +31,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       routes: <String, WidgetBuilder>{
-        SPLASH_SCREEN: (BuildContext context) => SplashScreen(),
         SIGNIN_SCREEN: (BuildContext context) => SignInScreen(),
         SIGNUP_SCREEN: (BuildContext context) => SignUpScreen(),
         PASSWORDRECOVER_SCREEN: (BuildContext context) =>

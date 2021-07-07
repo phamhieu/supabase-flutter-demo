@@ -23,15 +23,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  supabase_flutter: ^0.0.1-dev.1
   cupertino_icons: ^1.0.3
-  shared_preferences: ^2.0.6
+  email_validator: ^2.0.1
   rounded_loading_button: ^2.0.5
-  url_launcher: ^6.0.6
-  supabase: ^0.0.1-dev.24
-  fluttertoast: ^8.0.7
+  supabase: ^0.0.1-dev.26
   image_picker: ^0.8.0+3
   path: ^1.8.0
-  uni_links: ^0.5.1
 
 dev_dependencies:
   flutter_test:

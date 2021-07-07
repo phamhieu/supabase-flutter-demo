@@ -2,15 +2,14 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:demoapp/utils/supabase.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotrue/gotrue.dart';
 import 'package:demoapp/screens/signin_screen.dart';
 import 'package:demoapp/components/alert_modal.dart';
 import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen(this._appBarTitle, {Key? key}) : super(key: key);
@@ -23,6 +22,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   _ProfileScreenState(this._appBarTitle);
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final RoundedLoadingButtonController _signOutBtnController =
       new RoundedLoadingButtonController();
@@ -42,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
 
-    final clientUser = Supabase.client.auth.user();
+    final clientUser = Supabase().client.auth.user();
     if (clientUser != null) {
       setState(() {
         user = clientUser;
@@ -52,7 +53,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void loadProfile(String userId) async {
-    final response = await Supabase.client
+    final response = await Supabase()
+        .client
         .from('profiles')
         .select('username, website, avatar_url')
         .eq('id', userId)
@@ -81,8 +83,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final fileExt = extension(file.path);
       final fileName = '${getRandomStr(15)}$fileExt';
 
-      final response =
-          await Supabase.client.storage.from('avatars').upload(fileName, file);
+      final response = await Supabase()
+          .client
+          .storage
+          .from('avatars')
+          .upload(fileName, file);
       if (response.error == null) {
         setState(() {
           avatarUrl = fileName;
@@ -95,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _onSignOutPress(BuildContext context) async {
-    await Supabase.client.auth.signOut();
+    await Supabase().client.auth.signOut();
 
     Navigator.pushReplacement(
       context,
@@ -117,14 +122,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     };
 
     final response =
-        await Supabase.client.from('profiles').upsert(updates).execute();
+        await Supabase().client.from('profiles').upsert(updates).execute();
     if (response.error != null) {
       alertModal.show(context,
           title: 'Update profile failed', message: response.error!.message);
     }
 
     _updateProfileBtnController.reset();
-    Fluttertoast.showToast(msg: "profile updated", fontSize: 16.0);
+    showMessage("profile updated");
+  }
+
+  void showMessage(String message) {
+    final snackbar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(scaffoldKey.currentContext!).showSnackBar(snackbar);
   }
 
   @override
@@ -143,6 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     } else {
       return Scaffold(
+        key: scaffoldKey,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(this._appBarTitle),
@@ -239,7 +250,7 @@ class _AvatarContainerState extends State<AvatarContainer> {
 
   void downloadImage(String path) async {
     final response =
-        await Supabase.client.storage.from('avatars').download(path);
+        await Supabase().client.storage.from('avatars').download(path);
     if (response.error == null) {
       setState(() {
         image = response.data;
