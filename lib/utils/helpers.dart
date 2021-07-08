@@ -10,3 +10,7 @@ String? validateEmail(String? value) {
     return null;
   }
 }
+
+String? validatePassword(String? value) {
+  return value == null || value.isEmpty ? 'Invalid password' : null;
+}

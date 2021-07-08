@@ -1,3 +1,4 @@
+import 'package:demoapp/screens/change_password.dart';
 import 'package:demoapp/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/screens/forgot_password.dart';
@@ -33,10 +34,11 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (_) => SplashScreen(),
-        '/signIn': (context) => SignInScreen(),
-        '/signUp': (context) => SignUpScreen(),
-        '/forgotPassword': (context) => const ForgotPasswordScreen(),
-        '/profile': (context) => ProfileScreen(),
+        '/signIn': (_) => SignInScreen(),
+        '/signUp': (_) => SignUpScreen(),
+        '/forgotPassword': (_) => const ForgotPasswordScreen(),
+        '/profile': (_) => ProfileScreen(),
+        '/profile/changePassword': (_) => const ChangePasswordScreen(),
       },
     );
   }

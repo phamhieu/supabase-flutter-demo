@@ -6,7 +6,7 @@ class AuthState<T extends StatefulWidget> extends SupabaseAuthState<T> {
   @override
   void onUnauthenticated() {
     print('***** onUnauthenticated');
-    Navigator.pushReplacementNamed(context, '/signIn');
+    Navigator.pushNamedAndRemoveUntil(context, '/signIn', (route) => false);
   }
 
   @override
@@ -18,8 +18,7 @@ class AuthState<T extends StatefulWidget> extends SupabaseAuthState<T> {
   @override
   void onPasswordRecovery(supabase.Session session) {
     print('***** onPasswordRecovery: $session');
-    // TODO: show password change screen
-    // throw UnimplementedError();
+    Navigator.pushNamed(context, '/profile/changePassword');
   }
 
   @override

@@ -193,9 +193,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: const Text('Update profile',
                     style: TextStyle(fontSize: 20, color: Colors.white)),
               ),
-              const SizedBox(
-                height: 15.0,
+              const SizedBox(height: 15.0),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/profile/changePassword');
+                },
+                child: const Text("Change password"),
               ),
+              const Expanded(child: SizedBox()),
               RoundedLoadingButton(
                 color: Colors.red,
                 controller: _signOutBtnController,

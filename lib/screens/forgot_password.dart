@@ -51,6 +51,7 @@ class _ForgotPasswordState extends AuthState<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: const Text('Forgot password'),
       ),
