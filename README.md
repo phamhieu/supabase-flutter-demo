@@ -1,10 +1,12 @@
-# Supabase Demo App
+# Supabase Flutter User Management
 
-A Flutter project to demo supabase dart client.
+This example will set you up for a very common situation: users can sign up with a magic link and then update their account with public profile information, including a profile image.
 
 ## Getting Started
 
-Please update your `SUPABASE_URL` and `SUPABASE_ANNON_KEY` on `lib/utils/supabase.dart` before running the app.
+- Update your `SUPABASE_URL` and `SUPABASE_ANNON_KEY` [here](https://github.com/phamhieu/supabase-flutter-demo/blob/4fc589ed88cdecc0fc683d30063bb3848acc2a26/lib/utils/constants.dart#L5-L6)
+- Update your app custom `SCHEME` and `HOSTNAME` [here](https://github.com/phamhieu/supabase-flutter-demo/blob/4fc589ed88cdecc0fc683d30063bb3848acc2a26/lib/utils/constants.dart#L2)
+- Follow the guide [here](https://github.com/supabase/supabase-flutter#deeplink-config) to config deeplink and supabase project 3rd party login.
 
 ## Database schema
 
