@@ -37,8 +37,11 @@ class _ChangePasswordState extends AuthState<ChangePasswordScreen> {
         _btnController.reset();
       } else {
         showMessage('Password updated');
-        _btnController.success();
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/profile', (route) => false);
       }
+    } else {
+      _btnController.reset();
     }
     return true;
   }
@@ -65,6 +68,7 @@ class _ChangePasswordState extends AuthState<ChangePasswordScreen> {
               TextFormField(
                 onSaved: (value) => _password = value ?? '',
                 validator: (val) => validatePassword(val),
+                controller: _passwordField,
                 obscureText: true,
                 decoration: const InputDecoration(
                   hintText: 'Password',

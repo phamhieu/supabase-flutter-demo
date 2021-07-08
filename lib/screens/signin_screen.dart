@@ -46,7 +46,8 @@ class _SignInState extends AuthState<SignInScreen> {
         showMessage(response.error!.message);
         _signInEmailController.reset();
       } else {
-        Navigator.pushReplacementNamed(context, '/profile');
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/profile', (route) => false);
       }
     } else {
       _signInEmailController.reset();
@@ -163,13 +164,15 @@ class _SignInState extends AuthState<SignInScreen> {
               const SizedBox(height: 15.0),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/forgotPassword');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/forgotPassword', (route) => false);
                 },
                 child: const Text("Forgot your password ?"),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/signUp');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/signUp', (route) => false);
                 },
                 child: const Text("Don’t have an Account ? Sign up"),
               ),

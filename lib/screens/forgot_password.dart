@@ -84,7 +84,8 @@ class _ForgotPasswordState extends AuthState<ForgotPasswordScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/signIn');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/signIn', (route) => false);
                 },
                 child: const Text("Go back to sign in"),
               ),

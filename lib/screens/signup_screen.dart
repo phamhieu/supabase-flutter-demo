@@ -38,7 +38,8 @@ class _SignUpState extends AuthState<SignUpScreen> {
             "Please check your email and follow the instructions to verify your email address.");
         _btnController.success();
       } else {
-        Navigator.pushReplacementNamed(context, '/profile');
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/profile', (route) => false);
       }
     }
     return true;
@@ -93,7 +94,8 @@ class _SignUpState extends AuthState<SignUpScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/signIn');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/signIn', (route) => false);
                 },
                 child: const Text("Already have an Account ? Sign in"),
               ),
