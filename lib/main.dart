@@ -12,11 +12,11 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   // init Supabase singleton
-  print('***** main init Supabase');
   Supabase(
     url: supabaseUrl,
     anonKey: supabaseAnnonKey,
     authCallbackUrlHostname: 'login-callback',
+    debug: true,
   );
 
   runApp(MyApp());
