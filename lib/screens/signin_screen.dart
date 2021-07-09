@@ -164,15 +164,17 @@ class _SignInState extends AuthState<SignInScreen> {
               const SizedBox(height: 15.0),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/forgotPassword', (route) => false);
+                  stopAuthObserver();
+                  Navigator.pushNamed(context, '/forgotPassword')
+                      .then((_) => startAuthObserver());
                 },
                 child: const Text("Forgot your password ?"),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/signUp', (route) => false);
+                  stopAuthObserver();
+                  Navigator.pushNamed(context, '/signUp')
+                      .then((_) => startAuthObserver());
                 },
                 child: const Text("Don’t have an Account ? Sign up"),
               ),

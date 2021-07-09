@@ -1,4 +1,4 @@
-import 'package:demoapp/components/auth_state.dart';
+import 'package:demoapp/components/auth_required_state.dart';
 import 'package:demoapp/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -12,7 +12,7 @@ class ChangePasswordScreen extends StatefulWidget {
   _ChangePasswordState createState() => _ChangePasswordState();
 }
 
-class _ChangePasswordState extends AuthState<ChangePasswordScreen> {
+class _ChangePasswordState extends AuthRequiredState<ChangePasswordScreen> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -37,8 +37,12 @@ class _ChangePasswordState extends AuthState<ChangePasswordScreen> {
         _btnController.reset();
       } else {
         showMessage('Password updated');
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/profile', (route) => false);
+        if (Navigator.canPop(context)) {
+          _btnController.success();
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/profile', (route) => false);
+        }
       }
     } else {
       _btnController.reset();

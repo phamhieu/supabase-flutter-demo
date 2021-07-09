@@ -53,6 +53,7 @@ class _SignUpState extends AuthState<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: const Text('Sign up'),
       ),
@@ -91,14 +92,7 @@ class _SignUpState extends AuthState<SignUpScreen> {
                   'Sign up',
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/signIn', (route) => false);
-                },
-                child: const Text("Already have an Account ? Sign in"),
-              ),
+              )
             ],
           ),
         ),

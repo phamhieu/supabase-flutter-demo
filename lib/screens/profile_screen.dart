@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:demoapp/components/auth_required_state.dart';
 import 'package:flutter/material.dart';
 import 'package:gotrue/gotrue.dart';
 import 'package:path/path.dart';
@@ -14,7 +15,7 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
   _ProfileScreenState();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -97,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<bool> _onSignOutPress(BuildContext context) async {
     await Supabase().client.auth.signOut();
-    Navigator.pushReplacementNamed(context, '/signIn');
+    Navigator.pushNamedAndRemoveUntil(context, '/signIn', (route) => false);
     return true;
   }
 
@@ -196,7 +197,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 15.0),
               TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/profile/changePassword');
+                  stopAuthObserver();
+                  Navigator.pushNamed(context, '/profile/changePassword')
+                      .then((_) => startAuthObserver());
                 },
                 child: const Text("Change password"),
               ),

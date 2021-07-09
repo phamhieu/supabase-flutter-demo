@@ -81,14 +81,7 @@ class _ForgotPasswordState extends AuthState<ForgotPasswordScreen> {
                   'Send reset password instructions',
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/signIn', (route) => false);
-                },
-                child: const Text("Go back to sign in"),
-              ),
+              )
             ],
           ),
         ),
