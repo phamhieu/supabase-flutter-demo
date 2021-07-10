@@ -2,12 +2,14 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:demoapp/components/auth_required_state.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:supabase_demo/components/auth_required_state.dart';
 import 'package:flutter/material.dart';
 import 'package:gotrue/gotrue.dart';
 import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_demo/utils/helpers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -78,7 +80,7 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
     if (pickedFile != null) {
       final file = File(pickedFile.path);
       final fileExt = extension(file.path);
-      final fileName = '${getRandomStr(15)}$fileExt';
+      final fileName = '${randomString(15)}$fileExt';
 
       final response = await Supabase()
           .client
@@ -154,11 +156,10 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
-              AvatarContainer(avatarUrl, key: Key(avatarUrl)),
-              ElevatedButton(
-                onPressed: () => updateAvatar(context),
-                child: const Text('Change avatar',
-                    style: TextStyle(fontSize: 20, color: Colors.white)),
+              AvatarContainer(
+                url: avatarUrl,
+                onUpdatePressed: () => updateAvatar(context),
+                key: Key(avatarUrl),
               ),
               TextFormField(
                 onChanged: (value) => setState(() {
@@ -223,7 +224,10 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
 
 class AvatarContainer extends StatefulWidget {
   final String url;
-  const AvatarContainer(this.url, {Key? key}) : super(key: key);
+  final void Function() onUpdatePressed;
+  const AvatarContainer(
+      {required this.url, required this.onUpdatePressed, Key? key})
+      : super(key: key);
 
   @override
   _AvatarContainerState createState() => _AvatarContainerState();
@@ -232,6 +236,7 @@ class AvatarContainer extends StatefulWidget {
 class _AvatarContainerState extends State<AvatarContainer> {
   _AvatarContainerState();
 
+  bool loadingImage = true;
   Uint8List? image;
 
   @override
@@ -244,50 +249,61 @@ class _AvatarContainerState extends State<AvatarContainer> {
   }
 
   Future<bool> downloadImage(String path) async {
+    setState(() {
+      loadingImage = true;
+    });
+
     final response =
         await Supabase().client.storage.from('avatars').download(path);
     if (response.error == null) {
       setState(() {
         image = response.data;
+        loadingImage = false;
       });
-      return true;
     } else {
       print(response.error!.message);
-      return false;
+      setState(() {
+        loadingImage = false;
+      });
+    }
+    return true;
+  }
+
+  ImageProvider<Object> _getImage() {
+    if (image != null) {
+      return MemoryImage(image!);
+    } else {
+      return const AssetImage('assets/images/noavatar.jpeg');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (image == null) {
-      return Container(
-        width: 125,
-        height: 125,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage('assets/images/noavatar.jpeg'),
-          ),
+    if (loadingImage) {
+      return const CircleAvatar(
+        radius: 65,
+        child: Align(
+          child: CircularProgressIndicator(),
         ),
       );
     } else {
-      return Container(
-        width: 125,
-        height: 125,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: MemoryImage(image!),
+      return CircleAvatar(
+        radius: 65,
+        backgroundImage: _getImage(),
+        child: Stack(children: [
+          Align(
+            alignment: Alignment.bottomRight,
+            child: IconButton(
+              icon: const CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.white70,
+                child: Icon(CupertinoIcons.camera),
+              ),
+              onPressed: () => widget.onUpdatePressed(),
+            ),
           ),
-        ),
+        ]),
       );
     }
   }
-}
-
-String getRandomStr(int length) {
-  const ch = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
-  final Random r = Random();
-  return String.fromCharCodes(
-      Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
 }

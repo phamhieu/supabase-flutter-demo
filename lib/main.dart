@@ -1,11 +1,11 @@
-import 'package:demoapp/screens/change_password.dart';
-import 'package:demoapp/screens/profile_screen.dart';
+import 'package:supabase_demo/screens/change_password.dart';
+import 'package:supabase_demo/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:demoapp/screens/forgot_password.dart';
-import 'package:demoapp/screens/signin_screen.dart';
-import 'package:demoapp/screens/signup_screen.dart';
-import 'package:demoapp/screens/splash_screen.dart';
-import 'package:demoapp/utils/constants.dart';
+import 'package:supabase_demo/screens/forgot_password.dart';
+import 'package:supabase_demo/screens/signin_screen.dart';
+import 'package:supabase_demo/screens/signup_screen.dart';
+import 'package:supabase_demo/screens/splash_screen.dart';
+import 'package:supabase_demo/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() {
@@ -28,9 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Supabase Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
+      theme: ThemeData.dark(),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (_) => SplashScreen(),

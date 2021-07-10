@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:demoapp/components/auth_state.dart';
+import 'package:supabase_demo/components/auth_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +43,7 @@ class SplashScreenState extends AuthState<SplashScreen>
         child: SizedBox(
           height: 50.0,
           child: Image.asset(
-            "assets/images/logo-light.png",
+            "assets/images/logo-dark.png",
           ),
         ),
       ),

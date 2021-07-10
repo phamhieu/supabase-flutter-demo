@@ -1,5 +1,5 @@
-name: demoapp
-description: Supabase demo app.
+name: supabase_demo
+description: Supabase flutter user management. users can sign up with a magic link and then update their account with public profile information, including a profile image.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
