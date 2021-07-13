@@ -5,20 +5,11 @@ import 'package:supabase_demo/screens/forgot_password.dart';
 import 'package:supabase_demo/screens/signin_screen.dart';
 import 'package:supabase_demo/screens/signup_screen.dart';
 import 'package:supabase_demo/screens/splash_screen.dart';
-import 'package:supabase_demo/utils/constants.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // init Supabase singleton
-  Supabase(
-    url: supabaseUrl,
-    anonKey: supabaseAnnonKey,
-    authCallbackUrlHostname: 'login-callback',
-    debug: true,
-  );
-
+  configureApp();
   runApp(MyApp());
 }
 
