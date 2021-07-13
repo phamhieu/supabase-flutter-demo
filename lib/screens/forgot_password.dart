@@ -1,5 +1,4 @@
 import 'package:supabase_demo/components/auth_state.dart';
-import 'package:supabase_demo/utils/constants.dart';
 import 'package:supabase_demo/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
