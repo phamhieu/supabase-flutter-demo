@@ -29,6 +29,7 @@ dependencies:
   rounded_loading_button: ^2.0.5
   supabase: ^0.0.1-dev.27
   supabase_flutter: ^0.0.1-dev.2
+  universal_io: ^2.0.4
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.0

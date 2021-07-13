@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
@@ -11,6 +9,7 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_demo/utils/helpers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:universal_io/io.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
