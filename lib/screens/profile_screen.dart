@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_demo/components/auth_required_state.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,11 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
   final picker = ImagePicker();
 
   Future updateAvatar(BuildContext context) async {
+    if (kIsWeb) {
+      showMessage("File uploading not support on Flutter Web yet!");
+      return;
+    }
+
     final pickedFile = await _picker.getImage(source: ImageSource.camera);
     if (pickedFile != null) {
       final file = File(pickedFile.path);
