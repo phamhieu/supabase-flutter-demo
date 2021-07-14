@@ -124,7 +124,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_web_plugins:
-    dependency: "direct main"
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -405,7 +405,7 @@ packages:
       name: supabase_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1-dev.2"
+    version: "0.0.1-dev.5"
   term_glyph:
     dependency: transitive
     description:

@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:supabase/supabase.dart';
 import 'package:supabase_demo/components/auth_required_state.dart';
 import 'package:flutter/material.dart';
-import 'package:gotrue/gotrue.dart';
 import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -36,10 +36,8 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
   String avatarUrl = '';
 
   @override
-  void initState() {
-    super.initState();
-
-    final _user = Supabase().client.auth.user();
+  void onAuthenticated(Session session) {
+    final _user = session.user;
     if (_user != null) {
       setState(() {
         _appBarTitle = 'Welcome ${_user.email}';
@@ -104,6 +102,8 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
   }
 
   Future<bool> _onUpdateProfilePress(BuildContext context) async {
+    FocusScope.of(context).unfocus();
+
     final updates = {
       'id': user?.id,
       'username': username,
@@ -294,9 +294,12 @@ class _AvatarContainerState extends State<AvatarContainer> {
             alignment: Alignment.bottomRight,
             child: IconButton(
               icon: const CircleAvatar(
-                radius: 18,
+                radius: 25,
                 backgroundColor: Colors.white70,
-                child: Icon(CupertinoIcons.camera),
+                child: Icon(
+                  CupertinoIcons.camera,
+                  size: 18,
+                ),
               ),
               onPressed: () => widget.onUpdatePressed(),
             ),
