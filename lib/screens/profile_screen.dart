@@ -3,14 +3,15 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase/supabase.dart';
-import 'package:supabase_demo/components/auth_required_state.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:supabase_demo/utils/helpers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:universal_io/io.dart';
+
+import '/components/auth_required_state.dart';
+import '/utils/helpers.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override

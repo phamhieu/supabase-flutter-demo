@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:supabase_demo/utils/constants.dart';
+
+import '/utils/constants.dart';
 
 String? validateEmail(String? value) {
   const String pattern =
