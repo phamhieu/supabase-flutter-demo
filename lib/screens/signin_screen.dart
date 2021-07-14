@@ -21,6 +21,8 @@ class _SignInState extends AuthState<SignInScreen> {
       RoundedLoadingButtonController();
   final RoundedLoadingButtonController _githubSignInController =
       RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _googleSignInController =
+      RoundedLoadingButtonController();
 
   String _email = '';
   String _password = '';
@@ -85,6 +87,15 @@ class _SignInState extends AuthState<SignInScreen> {
 
     return Supabase().client.auth.signInWithProvider(
           supabase.Provider.github,
+          options: supabase.AuthOptions(redirectTo: authRedirectUri),
+        );
+  }
+
+  Future<bool> _googleSigninPressed(BuildContext context) async {
+    FocusScope.of(context).unfocus();
+
+    return Supabase().client.auth.signInWithProvider(
+          supabase.Provider.google,
           options: supabase.AuthOptions(redirectTo: authRedirectUri),
         );
   }
@@ -159,6 +170,33 @@ class _SignInState extends AuthState<SignInScreen> {
                 child: const Text(
                   'Github Login',
                   style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ),
+              const SizedBox(height: 15.0),
+              RoundedLoadingButton(
+                color: Colors.white,
+                valueColor: Colors.black,
+                controller: _googleSignInController,
+                onPressed: () {
+                  _googleSigninPressed(context);
+                },
+                child: RichText(
+                  text: const TextSpan(
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    children: [
+                      TextSpan(text: 'G', style: TextStyle(color: Colors.blue)),
+                      TextSpan(text: 'o', style: TextStyle(color: Colors.red)),
+                      TextSpan(
+                          text: 'o', style: TextStyle(color: Colors.yellow)),
+                      TextSpan(text: 'g', style: TextStyle(color: Colors.blue)),
+                      TextSpan(
+                          text: 'l', style: TextStyle(color: Colors.green)),
+                      TextSpan(text: 'e', style: TextStyle(color: Colors.red)),
+                      TextSpan(
+                          text: ' Login',
+                          style: TextStyle(color: Colors.black)),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 15.0),
