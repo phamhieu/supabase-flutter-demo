@@ -1,16 +1,16 @@
-import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:supabase/supabase.dart';
 import 'package:supabase_demo/components/auth_required_state.dart';
 import 'package:flutter/material.dart';
-import 'package:gotrue/gotrue.dart';
 import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_demo/utils/helpers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:universal_io/io.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -37,10 +37,8 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
   String avatarUrl = '';
 
   @override
-  void initState() {
-    super.initState();
-
-    final _user = Supabase().client.auth.user();
+  void onAuthenticated(Session session) {
+    final _user = session.user;
     if (_user != null) {
       setState(() {
         _appBarTitle = 'Welcome ${_user.email}';
@@ -76,6 +74,11 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
   final picker = ImagePicker();
 
   Future updateAvatar(BuildContext context) async {
+    if (kIsWeb) {
+      showMessage("File uploading not support on Flutter Web yet!");
+      return;
+    }
+
     final pickedFile = await _picker.getImage(source: ImageSource.camera);
     if (pickedFile != null) {
       final file = File(pickedFile.path);
@@ -105,6 +108,8 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
   }
 
   Future<bool> _onUpdateProfilePress(BuildContext context) async {
+    FocusScope.of(context).unfocus();
+
     final updates = {
       'id': user?.id,
       'username': username,
@@ -295,9 +300,12 @@ class _AvatarContainerState extends State<AvatarContainer> {
             alignment: Alignment.bottomRight,
             child: IconButton(
               icon: const CircleAvatar(
-                radius: 18,
+                radius: 25,
                 backgroundColor: Colors.white70,
-                child: Icon(CupertinoIcons.camera),
+                child: Icon(
+                  CupertinoIcons.camera,
+                  size: 18,
+                ),
               ),
               onPressed: () => widget.onUpdatePressed(),
             ),

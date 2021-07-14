@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+import 'package:supabase_demo/utils/constants.dart';
+
 String? validateEmail(String? value) {
   const String pattern =
       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
@@ -22,4 +25,12 @@ String randomString(int length) {
   final Random r = Random();
   return String.fromCharCodes(
       Iterable.generate(length, (_) => ch.codeUnitAt(r.nextInt(ch.length))));
+}
+
+String? get authRedirectUri {
+  if (kIsWeb) {
+    return null;
+  } else {
+    return myAuthRedirectUri;
+  }
 }
