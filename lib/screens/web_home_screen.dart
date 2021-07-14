@@ -29,6 +29,19 @@ class _WebHomeScreenState extends AuthState<WebHomeScreen>
     }
   }
 
+  Future<bool> onSignIn() async {
+    final hasAccessToken = await Supabase().hasAccessToken;
+    String route = '';
+    if (hasAccessToken) {
+      route = '/profile';
+    } else {
+      route = '/signIn';
+    }
+    stopAuthObserver();
+    Navigator.pushNamed(context, route).then((_) => startAuthObserver());
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,11 +52,7 @@ class _WebHomeScreenState extends AuthState<WebHomeScreen>
         child: SizedBox(
           height: 50.0,
           child: ElevatedButton(
-            onPressed: () {
-              stopAuthObserver();
-              Navigator.pushNamed(context, '/signIn')
-                  .then((_) => startAuthObserver());
-            },
+            onPressed: onSignIn,
             child: const Text('Sign in'),
           ),
         ),
