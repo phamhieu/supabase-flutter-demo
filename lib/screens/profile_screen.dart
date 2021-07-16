@@ -181,7 +181,7 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
           title: Text(_appBarTitle),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             children: <Widget>[
               AvatarContainer(

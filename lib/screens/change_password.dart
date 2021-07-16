@@ -67,7 +67,7 @@ class _ChangePasswordState extends AuthRequiredState<ChangePasswordScreen> {
         title: const Text('Change password'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(15.0),
         child: Form(
           key: formKey,
           child: Column(

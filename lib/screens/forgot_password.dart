@@ -53,7 +53,7 @@ class _ForgotPasswordState extends AuthState<ForgotPasswordScreen> {
         title: const Text('Forgot password'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(15.0),
         child: Form(
           key: formKey,
           child: Column(

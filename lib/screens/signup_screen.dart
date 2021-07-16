@@ -60,7 +60,7 @@ class _SignUpState extends AuthState<SignUpScreen> {
         title: const Text('Sign up'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(15.0),
         child: Form(
           key: formKey,
           child: Column(

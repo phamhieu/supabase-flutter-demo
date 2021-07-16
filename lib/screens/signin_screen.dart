@@ -104,7 +104,7 @@ class _SignInState extends AuthState<SignInScreen> {
         title: const Text('Sign in'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(15.0),
         child: Form(
           key: formKey,
           child: Column(
