@@ -43,102 +43,113 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
         _appBarTitle = 'Welcome ${_user.email}';
         user = _user;
       });
-      loadProfile(_user.id);
+      _loadProfile(_user.id);
     }
   }
 
-  Future<bool> loadProfile(String userId) async {
-    final response = await Supabase()
-        .client
-        .from('profiles')
-        .select('username, website, avatar_url')
-        .eq('id', userId)
-        .single()
-        .execute();
-    if (response.error == null && response.data != null) {
+  Future _loadProfile(String userId) async {
+    try {
+      final response = await Supabase()
+          .client
+          .from('profiles')
+          .select('username, website, avatar_url')
+          .eq('id', userId)
+          .maybeSingle()
+          .execute();
+      if (response.error != null) {
+        throw "Load profile failed: ${response.error!.message}";
+      }
+
       setState(() {
-        username = response.data['username'] as String? ?? '';
-        website = response.data['website'] as String? ?? '';
-        avatarUrl = response.data['avatar_url'] as String? ?? '';
-        loadingProfile = false;
+        username = response.data?['username'] as String? ?? '';
+        website = response.data?['website'] as String? ?? '';
+        avatarUrl = response.data?['avatar_url'] as String? ?? '';
       });
-    } else {
+    } catch (e) {
+      showMessage(e.toString());
+    } finally {
       setState(() {
         loadingProfile = false;
       });
     }
-    return true;
   }
 
-  final picker = ImagePicker();
+  Future _onSignOutPress(BuildContext context) async {
+    await Supabase().client.auth.signOut();
+    Navigator.pushNamedAndRemoveUntil(context, '/signIn', (route) => false);
+  }
 
-  Future updateAvatar(BuildContext context) async {
-    final pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
-      maxHeight: 600,
-      maxWidth: 600,
-    );
-    if (pickedFile == null) {
-      return;
-    }
+  Future _updateAvatar(BuildContext context) async {
+    try {
+      final pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 600,
+        maxWidth: 600,
+      );
+      if (pickedFile == null) {
+        return;
+      }
 
-    final size = await pickedFile.length();
-    if (size > 2000000) {
-      showMessage("The file is too large. Allowed maximum size is 1 MB.");
-      return;
-    }
+      final size = await pickedFile.length();
+      if (size > 1000000) {
+        throw "The file is too large. Allowed maximum size is 1 MB.";
+      }
 
-    final bytes = await pickedFile.readAsBytes();
-    final List<int> listBytes = List.from(bytes);
-    final file = BinaryFile(
-      bytes: listBytes,
-      mime: 'image/jpeg',
-    );
-    final fileName = '${randomString(15)}.jpg';
+      final bytes = await pickedFile.readAsBytes();
+      final List<int> listBytes = List.from(bytes);
+      final file = BinaryFile(
+        bytes: listBytes,
+        mime: 'image/jpeg',
+      );
+      final fileName = '${randomString(15)}.jpg';
 
-    final response = await Supabase()
-        .client
-        .storage
-        .from('avatars')
-        .uploadBinary(fileName, file);
+      final uploadRes = await Supabase()
+          .client
+          .storage
+          .from('avatars')
+          .uploadBinary(fileName, file);
+      if (uploadRes.error != null) {
+        throw uploadRes.error!.message;
+      }
 
-    if (response.error == null) {
+      final res = await Supabase().client.from('profiles').upsert({
+        'id': user!.id,
+        'avatar_url': fileName,
+      }).execute();
+      if (res.error != null) {
+        throw res.error!.message;
+      }
+
       setState(() {
         avatarUrl = fileName;
       });
-      _onUpdateProfilePress(context);
-    } else {
-      print(response.error!.message);
+      showMessage("Avatar updated!");
+    } catch (e) {
+      showMessage(e.toString());
     }
   }
 
-  Future<bool> _onSignOutPress(BuildContext context) async {
-    await Supabase().client.auth.signOut();
-    Navigator.pushNamedAndRemoveUntil(context, '/signIn', (route) => false);
-    return true;
-  }
-
-  Future<bool> _onUpdateProfilePress(BuildContext context) async {
+  Future _onUpdateProfilePress(BuildContext context) async {
     FocusScope.of(context).unfocus();
+    try {
+      final updates = {
+        'id': user?.id,
+        'username': username,
+        'website': website,
+        'updated_at': DateTime.now().toString(),
+      };
 
-    final updates = {
-      'id': user?.id,
-      'username': username,
-      'website': website,
-      'avatar_url': avatarUrl,
-      'updated_at': DateTime.now().toString(),
-    };
+      final response =
+          await Supabase().client.from('profiles').upsert(updates).execute();
+      if (response.error != null) {
+        throw "Update profile failed: ${response.error!.message}";
+      }
 
-    final response =
-        await Supabase().client.from('profiles').upsert(updates).execute();
-    if (response.error != null) {
-      showMessage("Update profile failed: ${response.error!.message}");
-      _updateProfileBtnController.reset();
-      return false;
-    } else {
-      _updateProfileBtnController.reset();
       showMessage("Profile updated!");
-      return true;
+    } catch (e) {
+      showMessage(e.toString());
+    } finally {
+      _updateProfileBtnController.reset();
     }
   }
 
@@ -174,7 +185,7 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
             children: <Widget>[
               AvatarContainer(
                 url: avatarUrl,
-                onUpdatePressed: () => updateAvatar(context),
+                onUpdatePressed: () => _updateAvatar(context),
                 key: Key(avatarUrl),
               ),
               TextFormField(
@@ -252,7 +263,7 @@ class AvatarContainer extends StatefulWidget {
 class _AvatarContainerState extends State<AvatarContainer> {
   _AvatarContainerState();
 
-  bool loadingImage = true;
+  bool loadingImage = false;
   Uint8List? image;
 
   @override
