@@ -130,8 +130,9 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
   }
 
   Future _onUpdateProfilePress(BuildContext context) async {
-    FocusScope.of(context).unfocus();
     try {
+      FocusScope.of(context).unfocus();
+
       final updates = {
         'id': user?.id,
         'username': username,

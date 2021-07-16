@@ -21,7 +21,7 @@ class _SignUpState extends AuthState<SignUpScreen> {
   String _email = '';
   String _password = '';
 
-  Future<bool> _onSignUpPress(BuildContext context) async {
+  Future _onSignUpPress(BuildContext context) async {
     final form = formKey.currentState;
 
     if (form != null && form.validate()) {
@@ -39,10 +39,12 @@ class _SignUpState extends AuthState<SignUpScreen> {
         _btnController.success();
       } else {
         Navigator.pushNamedAndRemoveUntil(
-            context, '/profile', (route) => false);
+          context,
+          '/profile',
+          (route) => false,
+        );
       }
     }
-    return true;
   }
 
   void showMessage(String message) {

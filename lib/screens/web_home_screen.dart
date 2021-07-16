@@ -13,8 +13,6 @@ class WebHomeScreen extends StatefulWidget {
 
 class _WebHomeScreenState extends AuthState<WebHomeScreen>
     with SingleTickerProviderStateMixin {
-  Timer? recoverSessionTimer;
-
   @override
   void initState() {
     super.initState();
@@ -29,17 +27,12 @@ class _WebHomeScreenState extends AuthState<WebHomeScreen>
     }
   }
 
-  Future<bool> onSignIn() async {
+  Future onSignIn() async {
     final hasAccessToken = await Supabase().hasAccessToken;
-    String route = '';
-    if (hasAccessToken) {
-      route = '/profile';
-    } else {
-      route = '/signIn';
-    }
+    final String route = hasAccessToken ? '/profile' : '/signIn';
+
     stopAuthObserver();
     Navigator.pushNamed(context, route).then((_) => startAuthObserver());
-    return true;
   }
 
   @override

@@ -31,7 +31,7 @@ class _SignInState extends AuthState<SignInScreen> {
     _githubSignInController.reset();
   }
 
-  Future<bool> _onSignInPress(BuildContext context) async {
+  Future _onSignInPress(BuildContext context) async {
     final form = formKey.currentState;
 
     if (form != null && form.validate()) {
@@ -47,15 +47,17 @@ class _SignInState extends AuthState<SignInScreen> {
         _signInEmailController.reset();
       } else {
         Navigator.pushNamedAndRemoveUntil(
-            context, '/profile', (route) => false);
+          context,
+          '/profile',
+          (route) => false,
+        );
       }
     } else {
       _signInEmailController.reset();
     }
-    return true;
   }
 
-  Future<bool> _onMagicLinkPress(BuildContext context) async {
+  Future _onMagicLinkPress(BuildContext context) async {
     final form = formKey.currentState;
 
     if (form != null && form.validate()) {
@@ -77,13 +79,12 @@ class _SignInState extends AuthState<SignInScreen> {
     } else {
       _magicLinkController.reset();
     }
-    return true;
   }
 
-  Future<bool> _githubSigninPressed(BuildContext context) async {
+  Future _githubSigninPressed(BuildContext context) async {
     FocusScope.of(context).unfocus();
 
-    return Supabase().client.auth.signInWithProvider(
+    Supabase().client.auth.signInWithProvider(
           supabase.Provider.github,
           options: supabase.AuthOptions(redirectTo: authRedirectUri),
         );

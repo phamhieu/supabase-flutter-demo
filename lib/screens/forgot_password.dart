@@ -20,7 +20,7 @@ class _ForgotPasswordState extends AuthState<ForgotPasswordScreen> {
 
   String _email = '';
 
-  Future<bool> _onPasswordRecoverPress(BuildContext context) async {
+  Future _onPasswordRecoverPress(BuildContext context) async {
     final form = formKey.currentState;
 
     if (form != null && form.validate()) {
@@ -38,7 +38,6 @@ class _ForgotPasswordState extends AuthState<ForgotPasswordScreen> {
         _btnController.success();
       }
     }
-    return true;
   }
 
   void showMessage(String message) {

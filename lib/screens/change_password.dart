@@ -22,31 +22,36 @@ class _ChangePasswordState extends AuthRequiredState<ChangePasswordScreen> {
 
   String _password = '';
 
-  Future<bool> _onPasswordChangePress(BuildContext context) async {
-    final form = formKey.currentState;
+  Future _onPasswordChangePress(BuildContext context) async {
+    try {
+      final form = formKey.currentState;
 
-    if (form != null && form.validate()) {
-      form.save();
-      FocusScope.of(context).unfocus();
+      if (form != null && form.validate()) {
+        form.save();
+        FocusScope.of(context).unfocus();
 
-      final userAttributes = UserAttributes(password: _password);
-      final response = await Supabase().client.auth.update(userAttributes);
-      if (response.error != null) {
-        showMessage('Password change failed: ${response.error!.message}');
-        _btnController.reset();
-      } else {
+        final userAttributes = UserAttributes(password: _password);
+        final response = await Supabase().client.auth.update(userAttributes);
+        if (response.error != null) {
+          throw 'Password change failed: ${response.error!.message}';
+        }
+
         showMessage('Password updated');
         if (Navigator.canPop(context)) {
           _btnController.success();
         } else {
           Navigator.pushNamedAndRemoveUntil(
-              context, '/profile', (route) => false);
+            context,
+            '/profile',
+            (route) => false,
+          );
         }
       }
-    } else {
+    } catch (e) {
+      showMessage(e.toString());
+    } finally {
       _btnController.reset();
     }
-    return true;
   }
 
   void showMessage(String message) {

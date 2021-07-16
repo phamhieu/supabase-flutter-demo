@@ -22,7 +22,6 @@ class SplashScreenState extends AuthState<SplashScreen>
     /// If not user can't really see the splash screen
     const _duration = Duration(seconds: 1);
     recoverSessionTimer = Timer(_duration, () {
-      print('***** splash screen trigger recoverSupabaseSession');
       recoverSupabaseSession();
     });
   }
@@ -31,7 +30,6 @@ class SplashScreenState extends AuthState<SplashScreen>
   /// and wait for auth deep link handling result
   @override
   void onReceivedAuthDeeplink(Uri uri) {
-    print('***** splash screen onReceivedAuthDeeplink ${uri.toString()}');
     if (recoverSessionTimer != null) {
       recoverSessionTimer!.cancel();
     }
