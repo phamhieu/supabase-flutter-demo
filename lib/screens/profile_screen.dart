@@ -4,11 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase/supabase.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:universal_io/io.dart';
 
 import '/components/auth_required_state.dart';
 import '/utils/helpers.dart';
@@ -75,30 +73,42 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
   final picker = ImagePicker();
 
   Future updateAvatar(BuildContext context) async {
-    if (kIsWeb) {
-      showMessage("File uploading not support on Flutter Web yet!");
+    final pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 600,
+      maxWidth: 600,
+    );
+    if (pickedFile == null) {
       return;
     }
 
-    final pickedFile = await _picker.getImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      final file = File(pickedFile.path);
-      final fileExt = extension(file.path);
-      final fileName = '${randomString(15)}$fileExt';
+    final size = await pickedFile.length();
+    if (size > 2000000) {
+      showMessage("The file is too large. Allowed maximum size is 1 MB.");
+      return;
+    }
 
-      final response = await Supabase()
-          .client
-          .storage
-          .from('avatars')
-          .upload(fileName, file);
-      if (response.error == null) {
-        setState(() {
-          avatarUrl = fileName;
-        });
-        _onUpdateProfilePress(context);
-      } else {
-        print(response.error!.message);
-      }
+    final bytes = await pickedFile.readAsBytes();
+    final List<int> listBytes = List.from(bytes);
+    final file = BinaryFile(
+      bytes: listBytes,
+      mime: 'image/jpeg',
+    );
+    final fileName = '${randomString(15)}.jpg';
+
+    final response = await Supabase()
+        .client
+        .storage
+        .from('avatars')
+        .uploadBinary(fileName, file);
+
+    if (response.error == null) {
+      setState(() {
+        avatarUrl = fileName;
+      });
+      _onUpdateProfilePress(context);
+    } else {
+      print(response.error!.message);
     }
   }
 
