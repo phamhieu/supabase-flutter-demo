@@ -181,7 +181,7 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
           title: Text(_appBarTitle),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             children: <Widget>[
               AvatarContainer(
@@ -211,9 +211,7 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
                   hintText: '',
                 ),
               ),
-              const SizedBox(
-                height: 35.0,
-              ),
+              const SizedBox(height: 35.0),
               RoundedLoadingButton(
                 color: Colors.green,
                 controller: _updateProfileBtnController,
@@ -223,16 +221,7 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
                 child: const Text('Update profile',
                     style: TextStyle(fontSize: 20, color: Colors.white)),
               ),
-              const SizedBox(height: 15.0),
-              TextButton(
-                onPressed: () {
-                  stopAuthObserver();
-                  Navigator.pushNamed(context, '/profile/changePassword')
-                      .then((_) => startAuthObserver());
-                },
-                child: const Text("Change password"),
-              ),
-              const Expanded(child: SizedBox()),
+              const SizedBox(height: 35.0),
               RoundedLoadingButton(
                 color: Colors.red,
                 controller: _signOutBtnController,
