@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 import 'screens/change_password.dart';
 import 'screens/forgot_password.dart';
 import 'screens/profile_screen.dart';
@@ -9,17 +9,10 @@ import 'screens/signin_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/web_home_screen.dart';
-import 'utils/constants.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // init Supabase singleton
-  Supabase(
-    url: supabaseUrl,
-    anonKey: supabaseAnnonKey,
-    authCallbackUrlHostname: 'login-callback',
-    debug: true,
-  );
+  configureApp();
   runApp(MyApp());
 }
 
