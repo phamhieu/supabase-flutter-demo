@@ -38,9 +38,7 @@ class _SignInState extends AuthState<SignInScreen> {
       form.save();
       FocusScope.of(context).unfocus();
 
-      final response = await Supabase()
-          .client
-          .auth
+      final response = await Supabase.instance.client.auth
           .signIn(email: _email, password: _password);
       if (response.error != null) {
         showMessage(response.error!.message);
@@ -64,12 +62,12 @@ class _SignInState extends AuthState<SignInScreen> {
       form.save();
       FocusScope.of(context).unfocus();
 
-      final response = await Supabase().client.auth.signIn(
-            email: _email,
-            options: supabase.AuthOptions(
-              redirectTo: authRedirectUri,
-            ),
-          );
+      final response = await Supabase.instance.client.auth.signIn(
+        email: _email,
+        options: supabase.AuthOptions(
+          redirectTo: authRedirectUri,
+        ),
+      );
       if (response.error != null) {
         showMessage(response.error!.message);
         _magicLinkController.reset();
@@ -84,10 +82,10 @@ class _SignInState extends AuthState<SignInScreen> {
   Future _githubSigninPressed(BuildContext context) async {
     FocusScope.of(context).unfocus();
 
-    Supabase().client.auth.signInWithProvider(
-          supabase.Provider.github,
-          options: supabase.AuthOptions(redirectTo: authRedirectUri),
-        );
+    Supabase.instance.client.auth.signInWithProvider(
+      supabase.Provider.github,
+      options: supabase.AuthOptions(redirectTo: authRedirectUri),
+    );
   }
 
   void showMessage(String message) {

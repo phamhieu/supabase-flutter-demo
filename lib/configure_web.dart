@@ -5,7 +5,7 @@ import 'utils/constants.dart';
 void configureApp() {
   // init Supabase singleton
   // no localStorage provided, fallback to use shared_preferences
-  Supabase(
+  Supabase.initialize(
     url: supabaseUrl,
     anonKey: supabaseAnnonKey,
     authCallbackUrlHostname: 'login-callback',

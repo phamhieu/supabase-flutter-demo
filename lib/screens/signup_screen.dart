@@ -28,7 +28,8 @@ class _SignUpState extends AuthState<SignUpScreen> {
       form.save();
       FocusScope.of(context).unfocus();
 
-      final response = await Supabase().client.auth.signUp(_email, _password,
+      final response = await Supabase.instance.client.auth.signUp(
+          _email, _password,
           options: supabase.AuthOptions(redirectTo: authRedirectUri));
       if (response.error != null) {
         showMessage('Sign up failed: ${response.error!.message}');

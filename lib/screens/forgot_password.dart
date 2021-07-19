@@ -27,9 +27,9 @@ class _ForgotPasswordState extends AuthState<ForgotPasswordScreen> {
       form.save();
       FocusScope.of(context).unfocus();
 
-      final response = await Supabase().client.auth.api.resetPasswordForEmail(
-          _email,
-          options: supabase.AuthOptions(redirectTo: authRedirectUri));
+      final response = await Supabase.instance.client.auth.api
+          .resetPasswordForEmail(_email,
+              options: supabase.AuthOptions(redirectTo: authRedirectUri));
       if (response.error != null) {
         showMessage('Password recovery failed: ${response.error!.message}');
         _btnController.reset();

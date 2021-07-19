@@ -31,7 +31,8 @@ class _ChangePasswordState extends AuthRequiredState<ChangePasswordScreen> {
         FocusScope.of(context).unfocus();
 
         final userAttributes = UserAttributes(password: _password);
-        final response = await Supabase().client.auth.update(userAttributes);
+        final response =
+            await Supabase.instance.client.auth.update(userAttributes);
         if (response.error != null) {
           throw 'Password change failed: ${response.error!.message}';
         }

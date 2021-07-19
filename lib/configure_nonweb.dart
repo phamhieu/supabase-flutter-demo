@@ -24,7 +24,7 @@ void configureApp() {
   });
   print('configureApp for Android, iOS');
   // init Supabase singleton
-  Supabase(
+  Supabase.initialize(
     url: supabaseUrl,
     anonKey: supabaseAnnonKey,
     authCallbackUrlHostname: 'login-callback',
