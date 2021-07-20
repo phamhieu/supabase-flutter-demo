@@ -67,7 +67,6 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
         avatarUrl = response.data?['avatar_url'] as String? ?? '';
         final updatedAt = response.data?['updated_at'] as String? ?? '';
         avatarKey = '$avatarUrl-$updatedAt';
-        print('updatedAt:$updatedAt  avatarKey=$avatarKey');
       });
     } catch (e) {
       showMessage(e.toString());
