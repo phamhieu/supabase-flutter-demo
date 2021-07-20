@@ -95,16 +95,10 @@ class _ProfileScreenState extends AuthRequiredState<ProfileScreen> {
       }
 
       final bytes = await pickedFile.readAsBytes();
-      final List<int> listBytes = List.from(bytes);
-      final file = BinaryFile(
-        bytes: listBytes,
-        mime: 'image/jpeg',
-      );
       final fileName = '${randomString(15)}.jpg';
-
       final uploadRes = await Supabase.instance.client.storage
           .from('avatars')
-          .uploadBinary(fileName, file);
+          .uploadBinary(fileName, bytes);
       if (uploadRes.error != null) {
         throw uploadRes.error!.message;
       }
