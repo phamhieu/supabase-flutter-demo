@@ -10,9 +10,9 @@ import 'screens/signup_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/web_home_screen.dart';
 
-void main() {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureApp();
+  await configureApp();
   runApp(MyApp());
 }
 
